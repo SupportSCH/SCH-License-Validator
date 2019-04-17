@@ -42,7 +42,7 @@ body#theme_sch, body#theme_toyota, body#theme_hccbpl {
 }
 #theme_nrr .btn-expanded:after {
 	content: ' \f191';
-	font-family: FontAwesome;
+	font-family: Font Awesome\ 5 Free;
 	font-style: normal;
 	font-weight: normal;
 	text-decoration: inherit;
@@ -51,7 +51,7 @@ body#theme_sch, body#theme_toyota, body#theme_hccbpl {
 }
 #theme_nrr .btn-collapsed:after {
 	content: ' \f152';
-	font-family: FontAwesome;
+	font-family: Font Awesome\ 5 Free;
 	font-style: normal;
 	font-weight: normal;
 	text-decoration: inherit;
@@ -60,7 +60,7 @@ body#theme_sch, body#theme_toyota, body#theme_hccbpl {
 }
 #theme_sch .btn-expanded:after, #theme_toyota .btn-expanded:after, #theme_hccbpl .btn-expanded:after {
 	content: ' \f191';
-	font-family: FontAwesome;
+	font-family: Font Awesome\ 5 Free;
 	font-style: normal;
 	font-weight: normal;
 	text-decoration: inherit;
@@ -71,7 +71,7 @@ body#theme_sch, body#theme_toyota, body#theme_hccbpl {
 }
 #theme_sch .btn-collapsed:after, #theme_toyota .btn-collapsed:after, #theme_hccbpl .btn-collapsed:after {
 	content: ' \f152';
-	font-family: FontAwesome;
+	font-family: Font Awesome\ 5 Free;
 	font-style: normal;
 	font-weight: normal;
 	text-decoration: inherit;

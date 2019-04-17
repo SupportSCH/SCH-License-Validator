@@ -5,14 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="loader" id="loaderurl" content="assets/img/loader.gif">
 <link rel="icon" type="image/png" href="assets/img/favicon.png" />
-<title>Dashboard | License Manager</title>
+<title>SCH License Manager</title>
 <link rel="stylesheet" href="assets/css/bootstrap.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
-<link rel="stylesheet" href="assets/css/supplierhub.css?v=1.0">
-<link rel="stylesheet" href="assets/css/themes.css?v=1.0">
-<link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css" />
+<link rel="stylesheet" href="assets/css/font-awesome-all.css">
+<link rel="stylesheet" href="assets/css/supplierhub.css?v=1.2">
+<link rel="stylesheet" href="assets/css/themes.css?v=1.2">
 </head>
 
 <body id="theme_sch">
@@ -126,22 +123,6 @@
     <!-- Scripts -->
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/js/bootstrap.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
     <script src="assets/js/supplierhub.js"></script>
-    <script>
-        $(".datePicker").datepicker({
-            format: 'dd-M-yyyy',
-            todayHighlight: true,
-            autoclose: true,
-        });
-        //datePicker lavel top
-        $(".md-form-control.datePicker").click(function () {
-            var $this = $(this);
-            if ($(this).val() == "") {
-                $this.siblings('label').addClass('active');
-            }
-        });
-        
-        </script>
 </body>
 </html>
