@@ -42,7 +42,7 @@ app.set('views', './public');
 // initialize cookie-parser to allow us access the cookies stored in the browser. 
 app.use(cookieParser());
 
-app.use(express.static('public'));
+app.use(express.static(__dirname + '/public'));
 
 // initialize express-session to allow us track the logged-in user across sessions.
 app.use(session({
@@ -79,7 +79,7 @@ var sessionChecker = (req, res, next) => {
 
 // route for Home-Page
 app.get('/', sessionChecker, (req, res) => {
-  res.sendFile(__dirname + '/public/customer-list.html');
+  res.sendFile(__dirname + '/public/license-list.html');
 });
 
 app.get('/lic_validator', (req, res) => {
@@ -450,7 +450,7 @@ app.get('/get_licenses', (req, res) => {
 app.get('/license_details/:id', (req, res) => {
   helpers.getLicenseDataById(req.params.id).then(licenses => {
     //res.end(JSON.stringify(licenses));
-    res.render("license-details.html", {
+    res.render(__dirname + "/public/license-details.html", {
       data: Buffer.from(JSON.stringify(licenses)).toString('base64')
     });
   });
