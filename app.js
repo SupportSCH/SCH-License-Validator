@@ -450,7 +450,7 @@ app.get('/get_licenses', (req, res) => {
 app.get('/license_details/:id', (req, res) => {
   helpers.getLicenseDataById(req.params.id).then(licenses => {
     //res.end(JSON.stringify(licenses));
-    res.render("license-details.html", {
+    res.render(__dirname + "/public/license-details.html", {
       data: Buffer.from(JSON.stringify(licenses)).toString('base64')
     });
   });
