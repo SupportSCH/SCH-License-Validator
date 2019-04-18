@@ -23,7 +23,7 @@ User.prototype.verifyPassword = function (password) {
 // invoke an instance of express application.
 var app = express();
 // set our application port
-app.set('port', 8000);
+app.set('port', 8001);
 
 // set morgan to log info about our requests for development use.
 app.use(morgan('dev'));
