@@ -82,7 +82,9 @@ app.get('/', sessionChecker, (req, res) => {
   res.sendFile(__dirname + '/public/customer-list.html');
 });
 
-
+app.get('/lic_validator', (req, res) => {
+  res.sendFile(__dirname + '/public/license-list.html');
+});
 
 
 // route for user signup
