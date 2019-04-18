@@ -1,32 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" class="no-js">
-<<<<<<< HEAD
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="loader" id="loaderurl" content="assets/img/loader.gif">
 <link rel="icon" type="image/png" href="assets/img/favicon.png" />
-<title>Dashboard | License Manager</title>
+<title>SCH License Manager</title>
 <link rel="stylesheet" href="assets/css/bootstrap.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
-<link rel="stylesheet" href="assets/css/supplierhub.css?v=1.0">
-<link rel="stylesheet" href="assets/css/themes.css?v=1.0">
-<link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
-<link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css" />
-=======
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="loader" id="loaderurl" content="assets/img/loader.gif">
-	<link rel="icon" type="image/png" href="assets/img/favicon.png" />
-    <title>SCH License Manager</title>
-    <link rel="stylesheet" href="assets/css/bootstrap.css">
-    <link rel="stylesheet" href="assets/css/font-awesome-all.css">
-    <link rel="stylesheet" href="assets/css/supplierhub.css?v=1.2">
-    <link rel="stylesheet" href="assets/css/themes.css?v=1.2">
->>>>>>> 6fd016af9b3490b3320dff4875f6ef5a306d2863
+<link rel="stylesheet" href="assets/css/font-awesome-all.css">
+<link rel="stylesheet" href="assets/css/supplierhub.css?v=1.2">
+<link rel="stylesheet" href="assets/css/themes.css?v=1.2">
 </head>
 
 <body id="theme_sch">
@@ -86,13 +69,13 @@
                             </div>
                         </a>
                         <a href="application-list.html">
-                            <div class="item active">
+                            <div class="item">
                                 <i class="fas fa-tags"></i>
                                 <span>Application</span>
                             </div>
                         </a>
                         <a href="license-list.html">
-                            <div class="item">
+                            <div class="item active">
                                 <i class="fas fa-key"></i>
                                 <span>License</span>
                             </div>
@@ -106,34 +89,76 @@
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_top_20">
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
-                                    <i class="fas fa-tags"></i> &nbsp;Create Application
-                                    <a class="panel-a-href pull-right" href="application-list.html"><i
-                                            class="fas fa-angle-double-left"></i> Back to List</a>
+                                    <i class="fas fa-key"></i> &nbsp;Enter License
+									<a class="panel-a-href pull-right" href="license-list.html"><i class="fas fa-angle-double-left"></i> Back to List</a>
                                 </div>
                                 <div class="panel-body m_top_15">
-                                    <form id="application_creation" action="#" method="POST">
-                                        <div class="col-md-6 col-xs-12">
-                                            <div class="md-input">
-                                                <input id="app_id" type="text" name='application_id'
-                                                    class="md-form-control" />
+                                    <form action="/create_license" method="POST">
+										<div class="col-md-11 col-xs-12">
+                                            <div class="md-input m_bot_15">
+                                                <input type="text" name='license' class="md-form-control"/>
                                                 <span class="highlight"></span>
                                                 <span class="bar"></span>
-                                                <label>Application ID</label>
+                                                <label>Enter License Number</label>
                                             </div>
                                         </div>
-                                        <div class="col-md-6 col-xs-12">
-                                            <div class="md-input">
-                                                <input id="app_name" type="text" name='application_name'
-                                                    class="md-form-control" />
-                                                <span class="highlight"></span>
-                                                <span class="bar"></span>
-                                                <label>Application Name</label>
-                                            </div>
+										<div class="col-md-1 col-xs-12 m_top_10">
+                                            <input class="btn btn-success btn-block" type="submit" value="Submit">
                                         </div>
-                                        <div class="col-md-6 col-xs-12">
-                                            <input class="btn btn-success" type="submit" value="Submit">
-                                        </div>
-                                    </form>
+									</form>
+								</div>
+								
+								<div class="panel-body">
+									<div class="col-md-2">
+										<h5>
+											<b class="themeColor"><i class="far fa-file-alt"></i> &nbsp; License Information</b>
+										</h5>
+									</div>
+									<div class="col-md-10 pull-right">
+										<hr>
+									</div>
+								</div>
+								<div class="panel-body">
+									<div class="col-md-6 col-xs-12">
+										<div class="md-input">
+											<input type="text" name='application_name' class="md-form-control" readonly/>
+											<span class="highlight"></span>
+											<span class="bar"></span>
+											<label class="readonly">Application Name</label>
+										</div>
+									</div>
+									<div class="col-md-6 col-xs-12">
+										<div class="md-input">
+											<input type="text" name='customer_name' class="md-form-control" readonly/>
+											<span class="highlight"></span>
+											<span class="bar"></span>
+											<label class="readonly">Customer Name</label>
+										</div>
+									</div>
+									<div class="col-md-6 col-xs-12">
+										<div class="md-input">
+											<input type="text" name='start_time' class="md-form-control" readonly/>
+											<span class="highlight"></span>
+											<span class="bar"></span>
+											<label class="readonly">License Start</label>
+										</div>
+									</div>
+									<div class="col-md-6 col-xs-12">
+										<div class="md-input">
+											<input type="text" name='end_time' class="md-form-control" readonly/>
+											<span class="highlight"></span>
+											<span class="bar"></span>
+											<label class="readonly">License End</label>
+										</div>
+									</div>
+									<div class="col-md-6 col-xs-12">
+										<div class="md-input">
+											<input type="text" name='no_of_users' class="md-form-control" readonly/>
+											<span class="highlight"></span>
+											<span class="bar"></span>
+											<label class="readonly">No. of Users</label>
+										</div>
+									</div>
                                 </div>
                             </div>
                         </div>
@@ -147,55 +172,7 @@
     </div>
     <!-- Scripts -->
     <script src="assets/js/jquery.min.js"></script>
-    <script src="assets/js/sweetalert.min.js"></script>
     <script src="assets/js/bootstrap.js"></script>
-<<<<<<< HEAD
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js">
-    </script>
     <script src="assets/js/supplierhub.js"></script>
-    <script>
-        $("#application_creation").submit(function (event) {
-            $.post("/add_application", {
-                    application_id: $('#app_id').val(),
-                    application_name: $('#app_name').val()
-                },
-                function (data, status) {
-                    data = JSON.parse(data);
-                    if (data.status) {
-                        swal({
-                            title: "Success",
-                            text: data.message,
-                            icon: "success",
-                        });
-                    } else {
-                        swal({
-                            title: "Failed",
-                            text: data.message,
-                            icon: "error",
-                        });
-                    }
-                });
-            $('#app_id').val("");
-            $('#app_name').val("");
-            event.preventDefault();
-        });
-
-        $(".datePicker").datepicker({
-            format: 'dd-M-yyyy',
-            todayHighlight: true,
-            autoclose: true,
-        });
-        //datePicker lavel top
-        $(".md-form-control.datePicker").click(function () {
-            var $this = $(this);
-            if ($(this).val() == "") {
-                $this.siblings('label').addClass('active');
-            }
-        });
-    </script>
-=======
-    <script src="assets/js/supplierhub.js"></script>
->>>>>>> 6fd016af9b3490b3320dff4875f6ef5a306d2863
 </body>
-
 </html>
