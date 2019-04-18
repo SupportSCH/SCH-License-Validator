@@ -12,7 +12,8 @@
 <link rel="stylesheet" href="assets/css/supplierhub.css?v=1.0">
 <link rel="stylesheet" href="assets/css/themes.css?v=1.0">
 <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css" />
+<link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css" />
 </head>
 
 <body id="theme_sch">
@@ -93,7 +94,8 @@
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <i class="fas fa-tags"></i> &nbsp;Application List
-									<a class="panel-a-href pull-right" href="application-create.html"><i class="fas fa-user-plus"></i> Create Application</a>
+                                    <a class="panel-a-href pull-right" href="application-create.html"><i
+                                            class="fas fa-user-plus"></i> Create Application</a>
                                 </div>
                                 <div class="panel-body">
                                     <div class="table-responsive">
@@ -104,10 +106,10 @@
                                                     <th>Application Name</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
+                                            <tbody id="application_list">
                                                 <tr>
-													<td>001</td>
-													<td>Test 1</td>
+                                                    <td>001</td>
+                                                    <td>Test 1</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -126,9 +128,24 @@
     <!-- Scripts -->
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/js/bootstrap.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js">
+    </script>
     <script src="assets/js/supplierhub.js"></script>
     <script>
+        $(document).ready(function () {
+            $.get("/get_apps", function (data, status) {
+                var str = "";
+                data = JSON.parse(data);
+                if (data.length > 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        str += "<tr><td>" + data[i].app_id + "</td>" + "<td>" + data[i].app_name +
+                            "</td></tr>";
+                    }
+                }
+                $('#application_list').html(str);
+            });
+        });
+
         $(".datePicker").datepicker({
             format: 'dd-M-yyyy',
             todayHighlight: true,
@@ -141,7 +158,7 @@
                 $this.siblings('label').addClass('active');
             }
         });
-        
-        </script>
+    </script>
 </body>
+
 </html>

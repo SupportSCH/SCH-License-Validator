@@ -58,6 +58,12 @@ $(function ($) {
 });
 /* Starts Search Validations */
 jQuery(document).ready(function ($) {
+	$(".datePicker").datepicker({
+		numberOfMonths: 1,
+		format: 'dd-M-yyyy',
+		todayHighlight: true,
+		autoclose: true
+	});
     $('.md-input .md-form-control').keyup(function () {
         var $this = $(this);
         if ($(this).val().length != 0) {
@@ -66,5 +72,12 @@ jQuery(document).ready(function ($) {
         {
             $this.siblings('label').removeClass('active');
         }
-    })
+    });
+	//datePicker lavel top
+	$(".md-form-control.datePicker").click(function () {
+		var $this = $(this);
+		if ($(this).val() == "") {
+			$this.siblings('label').addClass('active');
+		}
+	});
 });

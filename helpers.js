@@ -47,6 +47,30 @@ const getLicenseData = (application_id, customer_id) => {
     });
 }
 
+const getLicenseDataById = (ids) => {
+    return LicenseModel.findOne({
+        where: {
+            id: ids
+        },
+        include: [{
+                model: AppModel
+            },
+            {
+                model: CustomerModel,
+            },
+        ]
+    }).then(response => {
+        //the object with the data I need
+        return response.dataValues;
+    });
+}
+
+
+function formatMysqlDate(unix_timestamp) {
+    var formattedTime = new Date(unix_timestamp * 1000).toJSON().slice(0, 19).replace('T', ' ');
+    return formattedTime;
+}
+
 const getLicenseByAppId = (application_id) => {
     return LicenseModel.findOne({
         where: {
@@ -54,13 +78,21 @@ const getLicenseByAppId = (application_id) => {
         }
     }).then(response => {
         //console.log(response.dataValues); //the object with the data I need
-        return response.dataValues;
+        return response;
     });
 }
 
 const getAllLicense = (application_id) => {
-    return LicenseModel.findAll().then(response => {
-        //console.log(response.dataValues); //the object with the data I need
+    return LicenseModel.findAll({
+        include: [{
+                model: AppModel
+            },
+            {
+                model: CustomerModel,
+            },
+        ]
+    }).then(response => {
+        //console.log(response); //the object with the data I need
         return response;
     });
 }
@@ -144,5 +176,7 @@ module.exports = {
     InsertCustomerData,
     getAllLicense,
     getAllCustomers,
-    getAllApps
+    getAllApps,
+    getLicenseDataById,
+    formatMysqlDate
 };

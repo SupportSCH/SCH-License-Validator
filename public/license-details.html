@@ -4,14 +4,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="loader" id="loaderurl" content="assets/img/loader.gif">
-<link rel="icon" type="image/png" href="assets/img/favicon.png" />
-<title>Dashboard | License Manager</title>
-<link rel="stylesheet" href="assets/css/bootstrap.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
-<link rel="stylesheet" href="assets/css/supplierhub.css?v=1.0">
-<link rel="stylesheet" href="assets/css/themes.css?v=1.0">
-<link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
+<link rel="icon" type="image/png" href="/static/img/favicon.png" />
+<title>SCH License Manager</title>
+<link rel="stylesheet" href="/static/css/bootstrap.css">
+<link rel="stylesheet" href="/static/css/font-awesome-all.css">
+<link rel="stylesheet" href="/static/css/supplierhub.css?v=1.1">
+<link rel="stylesheet" href="/static/css/themes.css?v=1.2">
 </head>
 
 <body id="theme_sch">
@@ -28,7 +26,7 @@
                         <span class="icon-bar"></span>
                     </button>
                     <a class="navbar-brand sch_logo" href="#">
-                        <img src="assets/img/sch-logo-top.png" class="img-responsive">
+                        <img src="/static/img/sch-logo-top.png" class="img-responsive">
                     </a>
                     <a id="sidebarCollapse" class="navbar-brand btn-expanded" role="button" data-toggle="dropdown">
                         <span></span>
@@ -40,13 +38,13 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
                         <a class="navbar-brand dropdown">
-                            <img src="assets/img/default-profile.png" class="pull-left m_top_3">
+                            <img src="/static/img/default-profile.png" class="pull-left m_top_3">
                             <ul class="pull-right topbar-logo">
                                 <li class="fontSize12">Arju Bhakat</li>
                             </ul>
                         </a>
                         <a href="#" class="navbar-brand" role="button" data-toggle="dropdown" aria-expanded="false">
-                            <img src="assets/img/down-chevron.png" class="img-responsive m_top_4">
+                            <img src="/static/img/down-chevron.png" class="img-responsive m_top_4">
                         </a>
                         <ul class="dropdown-menu" role="menu">
                             <li>
@@ -92,72 +90,80 @@
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <i class="fas fa-key"></i> &nbsp;License Details
-									<a class="panel-a-href pull-right" href="license-list.html"><i class="fas fa-angle-double-left"></i> Back to List</a>
+                                    <a class="panel-a-href pull-right" href="../license-list.html"><i
+                                            class="fas fa-angle-double-left"></i> Back to List</a>
                                 </div>
                                 <div class="panel-body m_top_15">
                                     <form action="/create_license" method="POST">
-										<div class="col-md-12 col-xs-12">
+                                        <div class="col-md-12 col-xs-12">
                                             <div class="md-input m_bot_15">
-                                                <input type="text" name='license' class="md-form-control" readonly/>
+                                                <input id="lic_key" type="text" name='license' class="md-form-control"
+                                                    readonly />
                                                 <span class="highlight"></span>
                                                 <span class="bar"></span>
                                                 <label class="readonly">License Number</label>
                                             </div>
                                         </div>
-									</form>
-								</div>
-								
-								<div class="panel-body">
-									<div class="col-md-2">
-										<h5>
-											<b class="themeColor"><i class="far fa-file-alt"></i> &nbsp; License Information</b>
-										</h5>
-									</div>
-									<div class="col-md-10 pull-right">
-										<hr>
-									</div>
-								</div>
-								<div class="panel-body">
-									<div class="col-md-6 col-xs-12">
-										<div class="md-input">
-											<input type="text" name='application_name' class="md-form-control" readonly/>
-											<span class="highlight"></span>
-											<span class="bar"></span>
-											<label class="readonly">Application Name</label>
-										</div>
-									</div>
-									<div class="col-md-6 col-xs-12">
-										<div class="md-input">
-											<input type="text" name='customer_name' class="md-form-control" readonly/>
-											<span class="highlight"></span>
-											<span class="bar"></span>
-											<label class="readonly">Customer Name</label>
-										</div>
-									</div>
-									<div class="col-md-6 col-xs-12">
-										<div class="md-input">
-											<input type="text" name='start_time' class="md-form-control" readonly/>
-											<span class="highlight"></span>
-											<span class="bar"></span>
-											<label class="readonly">License Start</label>
-										</div>
-									</div>
-									<div class="col-md-6 col-xs-12">
-										<div class="md-input">
-											<input type="text" name='end_time' class="md-form-control" readonly/>
-											<span class="highlight"></span>
-											<span class="bar"></span>
-											<label class="readonly">License End</label>
-										</div>
-									</div>
-									<div class="col-md-6 col-xs-12">
-										<div class="md-input">
-											<input type="text" name='no_of_users' class="md-form-control" readonly/>
-											<span class="highlight"></span>
-											<span class="bar"></span>
-											<label class="readonly">No. of Users</label>
-										</div>
-									</div>
+                                    </form>
+                                </div>
+
+                                <div class="panel-body">
+                                    <div class="col-md-2">
+                                        <h5>
+                                            <b class="themeColor"><i class="far fa-file-alt"></i> &nbsp; License
+                                                Information</b>
+                                        </h5>
+                                    </div>
+                                    <div class="col-md-10 pull-right">
+                                        <hr>
+                                    </div>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="col-md-6 col-xs-12">
+                                        <div class="md-input">
+                                            <input id="app_name" type="text" name='application_name'
+                                                class="md-form-control" readonly />
+                                            <span class="highlight"></span>
+                                            <span class="bar"></span>
+                                            <label class="readonly">Application Name</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-xs-12">
+                                        <div class="md-input">
+                                            <input id="cust_name" type="text" name='customer_name'
+                                                class="md-form-control" readonly />
+                                            <span class="highlight"></span>
+                                            <span class="bar"></span>
+                                            <label class="readonly">Customer Name</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-xs-12">
+                                        <div class="md-input">
+                                            <input id="start_time" type="text" name='start_time' class="md-form-control"
+                                                readonly />
+                                            <span class="highlight"></span>
+                                            <span class="bar"></span>
+                                            <label class="readonly">License Start</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-xs-12">
+                                        <div class="md-input">
+                                            <input id="end_time" type="text" name='end_time' class="md-form-control"
+                                                readonly />
+                                            <span class="highlight"></span>
+                                            <span class="bar"></span>
+                                            <label class="readonly">License End</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-xs-12">
+                                        <div class="md-input">
+                                            <input id="users" type="text" name='no_of_users' class="md-form-control"
+                                                readonly />
+                                            <span class="highlight"></span>
+                                            <span class="bar"></span>
+                                            <label class="readonly">No. of Users</label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -167,11 +173,35 @@
         </div>
     </div>
     <div id="footer" class="hccbpl">
-        <img src="assets/img/sch_logo.png" class="img-responsive">
+        <img src="/static/img/sch_logo.png" class="img-responsive">
     </div>
     <!-- Scripts -->
-    <script src="assets/js/jquery.min.js"></script>
-    <script src="assets/js/bootstrap.js"></script>
-    <script src="assets/js/supplierhub.js"></script>
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.js"></script>
+    <script src="/static/js/supplierhub.js"></script>
+
+    <script>
+        function GetFormattedDate(date) {
+            var d = new Date(date);
+            var final = d.getDate().toString() + '-' + (d.getMonth() + 1).toString() + '-' + d.getFullYear().toString();
+            return final;
+        }
+
+        function formatMysqlDate(unix_timestamp) {
+            var formattedTime = new Date(unix_timestamp * 1000).toJSON().slice(0, 19).replace('T', ' ');
+            return formattedTime;
+        }
+
+        var data = "<%= data %>";
+        var update_ui = JSON.parse(atob(data));
+        console.log(update_ui);
+        $('#app_name').val(update_ui.app_master.app_id);
+        $('#cust_name').val(update_ui.customer_master.cust_name);
+        $('#start_time').val(GetFormattedDate(update_ui.license_start));
+        $('#end_time').val(GetFormattedDate(update_ui.license_end));
+        $('#users').val(update_ui.no_of_users);
+        $('#lic_key').val(update_ui.license_key);
+    </script>
 </body>
+
 </html>

@@ -12,7 +12,8 @@
 <link rel="stylesheet" href="assets/css/supplierhub.css?v=1.0">
 <link rel="stylesheet" href="assets/css/themes.css?v=1.0">
 <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css" />
+<link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css" />
 </head>
 
 <body id="theme_sch">
@@ -93,13 +94,15 @@
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <i class="fas fa-tags"></i> &nbsp;Create Application
-									<a class="panel-a-href pull-right" href="application-list.html"><i class="fas fa-angle-double-left"></i> Back to List</a>
+                                    <a class="panel-a-href pull-right" href="application-list.html"><i
+                                            class="fas fa-angle-double-left"></i> Back to List</a>
                                 </div>
                                 <div class="panel-body m_top_15">
-                                    <form action="#" method="POST">
+                                    <form id="application_creation" action="#" method="POST">
                                         <div class="col-md-6 col-xs-12">
                                             <div class="md-input">
-                                                <input type="text" name='application_id' class="md-form-control"/>
+                                                <input id="app_id" type="text" name='application_id'
+                                                    class="md-form-control" />
                                                 <span class="highlight"></span>
                                                 <span class="bar"></span>
                                                 <label>Application ID</label>
@@ -107,7 +110,8 @@
                                         </div>
                                         <div class="col-md-6 col-xs-12">
                                             <div class="md-input">
-                                                <input type="text" name='application_name' class="md-form-control"/>
+                                                <input id="app_name" type="text" name='application_name'
+                                                    class="md-form-control" />
                                                 <span class="highlight"></span>
                                                 <span class="bar"></span>
                                                 <label>Application Name</label>
@@ -130,10 +134,38 @@
     </div>
     <!-- Scripts -->
     <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/sweetalert.min.js"></script>
     <script src="assets/js/bootstrap.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js">
+    </script>
     <script src="assets/js/supplierhub.js"></script>
     <script>
+        $("#application_creation").submit(function (event) {
+            $.post("/add_application", {
+                    application_id: $('#app_id').val(),
+                    application_name: $('#app_name').val()
+                },
+                function (data, status) {
+                    data = JSON.parse(data);
+                    if (data.status) {
+                        swal({
+                            title: "Success",
+                            text: data.message,
+                            icon: "success",
+                        });
+                    } else {
+                        swal({
+                            title: "Failed",
+                            text: data.message,
+                            icon: "error",
+                        });
+                    }
+                });
+            $('#app_id').val("");
+            $('#app_name').val("");
+            event.preventDefault();
+        });
+
         $(".datePicker").datepicker({
             format: 'dd-M-yyyy',
             todayHighlight: true,
@@ -146,7 +178,7 @@
                 $this.siblings('label').addClass('active');
             }
         });
-        
-        </script>
+    </script>
 </body>
+
 </html>

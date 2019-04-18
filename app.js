@@ -3,6 +3,7 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var morgan = require('morgan');
+var path = require('path');
 var User = require('./models/user');
 var AppModel = require('./models/app_master');
 var CustomerModel = require('./models/customer_master');
@@ -31,6 +32,12 @@ app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({
   extended: true
 }));
+
+app.use('/static', express.static(path.join(__dirname, '/public/assets')));
+
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
+app.set('views', './public');
 
 // initialize cookie-parser to allow us access the cookies stored in the browser. 
 app.use(cookieParser());
@@ -191,13 +198,16 @@ app.post('/install_license', (req, res) => {
   var response = {
     status: false,
     message: 'Invalid License'
-  }
-  if (req.files.hasOwnProperty('license')) {
-    var license_data = req.file.license.data.toString('utf8');
+  };
+
+  if (req.body.hasOwnProperty('license')) {
+    var license_data = req.body.license;
     if (license_data) {
-      var license_obj = cipher.decrypt(license_data);
+      var license_obj = JSON.parse(cipher.decrypt(license_data));
+      //console.log(license_obj);
       var request_array = Object.keys(license_obj);
-      var required_array = ['customer_id', 'customer_name', 'start_time', 'end_time', 'application_id', 'application_name', 'machine_id'];
+      //console.log(request_array);
+      var required_array = ['application_id', 'application_name', 'customer_id', 'customer_name', 'start_time', 'end_time', 'no_of_users'];
       var check_array_equals = helpers.arraysEqual(request_array, required_array);
       if (check_array_equals) {
         var app_exists = helpers.getAppByAppId(license_obj.application_id).then(application => {
@@ -211,20 +221,22 @@ app.post('/install_license', (req, res) => {
             app_id: license_obj.application_id,
             cust_id: license_obj.customer_id,
             no_of_users: license_obj.no_of_users,
-            license_start: license_obj.start_time,
-            license_end: license_obj.end_time,
+            license_start: helpers.formatMysqlDate(license_obj.start_time),
+            license_end: helpers.formatMysqlDate(license_obj.end_time),
             license_key: license_data
           };
 
+          console.log(upsert);
           var match = {
             app_id: license_obj.application_id,
             cust_id: license_obj.customer_id
           };
 
-          helpers.Upsert(match, upsert).then(function (status) {
+          helpers.Upsert(upsert, match).then(function (status) {
             if (status) {
               response.message = "License Applied Successfully";
               response.status = true;
+              response.decrypt = license_obj;
               res.end(JSON.stringify(response));
             } else {
               response.message = "Application is not created in the database";
@@ -232,7 +244,8 @@ app.post('/install_license', (req, res) => {
             }
           });
         } else {
-
+          response.message = "License details not found";
+          res.end(JSON.stringify(response));
         }
       } else {
         response.message = "License file is corrupted";
@@ -281,9 +294,9 @@ function validateBody(body, res, json) {
     check_required.push('Application ID is empty in the request');
   }
 
-  if (!body.hasOwnProperty('customer_id')) {
-    check_required.push('Customer ID is empty in the request ');
-  }
+  // if (!body.hasOwnProperty('customer_id')) {
+  //   check_required.push('Customer ID is empty in the request ');
+  // }
 
   if (!body.hasOwnProperty('user_count')) {
     check_required.push('No of User count is empty in the request');
@@ -296,41 +309,46 @@ function validateBody(body, res, json) {
   }
 
   var data = helpers.getLicenseByAppId(body.application_id).then(application => {
-    if (body.application_id != application.application_id) {
+    if (body.application_id != application.app_id) {
       result.push('Application ID doesnt match');
     }
 
-    if (body.customer_id != application.customer_id) {
-      result.push('Customer ID doesnt match');
+    if (body.user_count > application.no_of_users) {
+      result.push('User limit reached');
     }
 
     // if (body.secret != enc_data.machine_id) {
     //   result.push('Secret doesnt match');
     // }
-    console.log(enc_data);
+    //console.log(enc_data);
     var cur_time = new Date().getTime() / 1000;
+    var license_start = new Date(application.license_start).getTime() / 1000;
+    var license_end = new Date(application.license_end).getTime() / 1000;
+    json.license_start = license_start;
+    json.license_end = license_end;
     console.log("======= Current time =========");
     console.log(cur_time);
     console.log("======= Start time =========");
-    console.log(application.start_time);
+    console.log(license_start);
     console.log("======= End time =========");
-    console.log(application.end_time);
+    console.log(license_end);
 
-    if (application.start_time > cur_time) {
+    if (license_start > cur_time) {
       result.push('License start time has not reached');
     }
 
-    if (cur_time > application.end_time) {
+    if (cur_time > license_end) {
       result.push('License is expired');
     }
 
     if (result.length > 0) {
       json.status = false;
       json.reason = JSON.stringify(result);
-      json.license_start = application.start_time;
-      json.license_end = application.end_time;
+
+      res.end(JSON.stringify(json));
     }
 
+    json.reason = JSON.stringify(['License is valid']);
     res.end(JSON.stringify(json));
 
   }, (reason) => {
@@ -420,6 +438,21 @@ app.get('/get_customer', (req, res) => {
   });
 });
 
+app.get('/get_licenses', (req, res) => {
+  helpers.getAllLicense(1).then(licenses => {
+    res.end(JSON.stringify(licenses));
+  });
+});
+
+
+app.get('/license_details/:id', (req, res) => {
+  helpers.getLicenseDataById(req.params.id).then(licenses => {
+    //res.end(JSON.stringify(licenses));
+    res.render("license-details.html", {
+      data: Buffer.from(JSON.stringify(licenses)).toString('base64')
+    });
+  });
+});
 
 
 app.get('/create_license', (req, res) => {
