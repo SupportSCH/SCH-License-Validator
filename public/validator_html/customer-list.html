@@ -124,6 +124,7 @@
                                                 <tr>
                                                     <th>ID</th>
                                                     <th>Customer Name</th>
+													<th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="customer_list">
@@ -153,18 +154,44 @@
     <script src="assets/js/supplierhub.js"></script>
     <script>
         $(document).ready(function () {
-            $.get("/license_validator/api/get_customer", function (data, status) {
+            load_ui();
+        });
+		
+		function load_ui() {
+		$.get("/license_validator/api/get_customer", function (data, status) {
                 var str = "";
                 data = JSON.parse(data);
                 if (data.length > 0) {
                     for (var i = 0; i < data.length; i++) {
                         str += "<tr><td>" + data[i].cust_id + "</td>" + "<td>" + data[i].cust_name +
-                            "</td></tr>";
+                            "</td>" + "<td><button onclick='delete_customer(" + data[i].cust_id +
+                            ")'" + " class='btn btn-danger btn-xs' title='Delete'>" +
+                            "<i class='fas fa-trash'></i></button></td></tr>";
                     }
                 }
                 $('#customer_list').html(str);
             });
-        });
+		}
+		
+		function delete_customer(id) {
+            $.get("/license_validator/api/delete_customer/" + id, function (data, status) {
+                data = JSON.parse(data);
+                if (data.status) {
+                    load_ui();
+                    swal({
+                        title: "Success",
+                        text: data.message,
+                        icon: "success",
+                    });
+                } else {
+                    swal({
+                        title: "Failed",
+                        text: data.message,
+                        icon: "error",
+                    });
+                }
+            });
+        }
     </script>
 </body>
 

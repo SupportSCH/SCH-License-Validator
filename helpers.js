@@ -269,6 +269,40 @@ const deleteNotificationById = (source_id) => {
     });
 }
 
+const deleteApplicationById = (source_id) => {
+    return AppModel.destroy({
+        where: {
+            app_id: source_id //this will be your id that you want to delete
+        }
+    }).then(function (rowDeleted) { // rowDeleted will return number of rows deleted
+        if (rowDeleted === 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }, function (err) {
+        console.log(err);
+        return false;
+    });
+}
+
+const deleteCustomerById = (source_id) => {
+    return CustomerModel.destroy({
+        where: {
+            cust_id: source_id //this will be your id that you want to delete
+        }
+    }).then(function (rowDeleted) { // rowDeleted will return number of rows deleted
+        if (rowDeleted === 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }, function (err) {
+        console.log(err);
+        return false;
+    });
+}
+
 const getAllTransTypes = (application_id) => {
     return TransSourceModel.findAll().then(response => {
         //console.log(response); //the object with the data I need
@@ -344,11 +378,12 @@ async function ProcessLicenseEmailJobs(res) {
                 var cur_date = new Date();
                 var license_end_date = new Date(license.license_end);
                 var diff_days = datediff(cur_date, license_end_date);
-                console.log(diff_days);
+                //console.log(diff_days);
                 var stat = {
                     status: true
                 };
-                if (noti.exp_period >= diff_days && diff_days >= 0) {
+
+                if (between(diff_days, noti.exp_period, diff_days)) {
                     noti.data_source.user_name = cipher.decrypt(noti.data_source.user_name);
                     noti.data_source.password = cipher.decrypt(noti.data_source.password);
                     var trans_data = await external.GetExternalTransactionData(noti.data_source);
@@ -364,11 +399,20 @@ async function ProcessLicenseEmailJobs(res) {
                     };
                     await emailer.sendLicenseMail(options);
                     res.end(JSON.stringify(stat));
+                } else {
+                    console.log("exp period: " + noti.exp_period);
+                    console.log("diff_days: " + diff_days);
+                    stat.status = false;
+                    res.end(JSON.stringify(stat));
                 }
             });
         });
     });
 }
+
+function between(x, min, max) {
+    return x >= min && x <= max;
+  }
 
 const groupByKey = key => array =>
     array.reduce((objectsByKeyValue, obj) => {
@@ -407,5 +451,8 @@ module.exports = {
     datediff,
     ProcessLicenseEmailJobs,
     groupByKey,
-    GetFormattedDate
+    GetFormattedDate,
+    deleteApplicationById,
+    deleteCustomerById,
+    between
 };

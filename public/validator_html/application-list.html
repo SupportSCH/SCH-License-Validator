@@ -128,12 +128,14 @@
                                                 <tr>
                                                     <th>ID</th>
                                                     <th>Application Name</th>
+													<th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="application_list">
                                                 <tr>
                                                     <td>001</td>
                                                     <td>Test 1</td>
+													<td>0</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -157,18 +159,44 @@
     <script src="assets/js/supplierhub.js"></script>
     <script>
         $(document).ready(function () {
-            $.get("/license_validator/api/get_apps", function (data, status) {
+            load_ui();
+        });
+		
+		function load_ui() {
+		$.get("/license_validator/api/get_apps", function (data, status) {
                 var str = "";
                 data = JSON.parse(data);
                 if (data.length > 0) {
                     for (var i = 0; i < data.length; i++) {
                         str += "<tr><td>" + data[i].app_id + "</td>" + "<td>" + data[i].app_name +
-                            "</td></tr>";
+                            "</td>" + "<td><button onclick='delete_app(" + data[i].app_id +
+                            ")'" + "class='btn btn-danger btn-xs' title='Delete'>" +
+                            "<i class='fas fa-trash'></i></button></td></tr>";
                     }
                 }
                 $('#application_list').html(str);
             });
-        });
+		}
+		
+		function delete_app(id) {
+            $.get("/license_validator/api/delete_app/" + id, function (data, status) {
+                data = JSON.parse(data);
+                if (data.status) {
+                    load_ui();
+                    swal({
+                        title: "Success",
+                        text: data.message,
+                        icon: "success",
+                    });
+                } else {
+                    swal({
+                        title: "Failed",
+                        text: data.message,
+                        icon: "error",
+                    });
+                }
+            });
+        }
 
         $(".datePicker").datepicker({
             format: 'dd-M-yyyy',

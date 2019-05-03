@@ -20,25 +20,28 @@ var AppModel = sequelize.define('app_masters', {
         allowNull: true
     },
     created_at: {
-        type : 'TIMESTAMP',
+        type: 'TIMESTAMP',
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
         allowNull: false,
     },
     updated_at: {
-        type : 'TIMESTAMP',
+        type: 'TIMESTAMP',
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
         allowNull: false,
     }
 });
 
-
+sequelize.query('SET FOREIGN_KEY_CHECKS = 0;', {
+    raw: true
+}).then(function () {
+    sequelize.sync()
+        .then(() => console.log('appmodel table has been successfully created, if one doesn\'t exist'))
+        .catch(error => console.log('This error occured', error));
+});
 
 // create all the defined tables in the specified database.
-sequelize.sync()
-    .then(() => console.log('appmodel table has been successfully created, if one doesn\'t exist'))
-    .catch(error => console.log('This error occured', error));
 
-    
+
 
 // export User model for use in other files.
 module.exports = AppModel;

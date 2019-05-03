@@ -267,18 +267,17 @@
 		.card .box-body .name {
 			float: left;
 			margin-top: 5px;
-			font-size: 16px;
+			font-size: 14px;
 			display: block;
-			width: 150px;
+			max-width: 125px;
 			word-wrap: break-word;
 		}
 
 		.card .box-body .value {
-			
+			float: right;
 			margin-top: 5px;
-			font-size: 16px;
+			font-size: 14px;
 			display: block;
-			
 			word-wrap: break-word;
 		}
 
@@ -334,7 +333,7 @@
 														<% for (var key in trans_data) { %>
 														<% if(trans_data.hasOwnProperty(key)) { %>
 														<div class="col-lg-4 col-sm-6">
-															<div class="card bg-1">
+															<div class="card bg-1" style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; box-shadow: 0 15px 25px 0 rgba(36, 50, 66, .14); background-color: #FFFFFF; border-radius: 6px; min-height: 193px; margin-bottom: 10px; word-wrap: break-word; border-bottom: 2px solid #42c4de;">
 																<div class="header">
 																	<div class="stats">
 																		<i class="fas fa-cart-arrow-down"></i>
@@ -347,7 +346,7 @@
 																			<% var data = trans_data[key]; %>
 																			<% for(var i = 0 ; i < trans_data[key].length; i++) { %>
 																			<% var arr = trans_data[key][i]; %>
-																			<div class="col-xs-12">
+																			<div class="col-xs-12" style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; position: relative; min-height: 1px; padding-right: 3px; padding-left: 3px; float: left; width: 100%;">
 																				<span class='name'
 																					style="text-align: left">
 																					<%= arr.parameter_value.toUpperCase() %></span>
@@ -364,11 +363,15 @@
 														</div>
 														<% } %>
 														<% } %>
-
-
-														<p class="footerText">Regards,<br>Supply Chain Hub Team</p>
 												</td>
 											</tr>
+
+											<tr>
+												<td valign="top" align="center" class="inner-element" style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; padding: 0 25px 20px; background-color: #fff; border-radius: 6px;" bgcolor="#fff">
+													<p class="footerText" style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; orphans: 3; widows: 3; margin: 0 0 10px; text-align: left; color: #555; font-size: 14px;">Regards,<br style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;">Supply Chain Hub Team</p>
+												</td>
+											<tr>
+
 										</tbody>
 									</table>
 									<!--<p style="margin:0"><img src="assets/img/strip_bottom.png" width="100%" style="display:block" class="CToWUd"></p>-->

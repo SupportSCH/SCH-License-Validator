@@ -163,9 +163,12 @@
     <script src="assets/js/supplierhub.js"></script>
     <script>
         $(document).ready(function () {
-            $.get("/license_validator/api/get_licenses", function (data, status) {
+            load_ui();
+        });
+		
+		function load_ui() {
+		$.get("/license_validator/api/get_licenses", function (data, status) {
                 var str = "";
-
                 data = JSON.parse(data);
                 if (data.length > 0) {
                     for (var i = 0; i < data.length; i++) {
@@ -180,7 +183,7 @@
                 }
                 $('#licenses_list').html(str);
             });
-        });
+		}
 
         function GetFormattedDate(date) {
             var d = new Date(date);

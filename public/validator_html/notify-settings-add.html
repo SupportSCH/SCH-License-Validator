@@ -223,17 +223,15 @@
             });
 
             $("#data_sources_list").change(function () {
-                //alert($('option:selected', this).text());
-                //GetDataSourceDetails();
                 if (this.value == 0) {
                     document.getElementById('more_fields').style.display = "none";
                 } else {
                     $.get("/license_validator/api/get_data_source_by_id/" + this.value, function (data,
                         status) {
                         data = JSON.parse(data);
-                        console.log(data);
+                        //console.log(data);
                         if (data) {
-                            $('#grace_period').val(10);
+                            //$('#grace_period').val(10);
                             document.getElementById('more_fields').style.display = "block";
                         } else {
                             document.getElementById('more_fields').style.display = "none";

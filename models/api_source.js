@@ -56,9 +56,15 @@ ApiSourcesModel.belongsTo(DataSourceModel, {
 });
 
 // create all the defined tables in the specified database.
-sequelize.sync()
-    .then(() => console.log('api_sources table has been successfully created, if one doesn\'t exist'))
-    .catch(error => console.log('This error occured', error));
+
+sequelize.query('SET FOREIGN_KEY_CHECKS = 0;', {
+    raw: true
+}).then(function () {
+    sequelize.sync()
+        .then(() => console.log('api_sources table has been successfully created, if one doesn\'t exist'))
+        .catch(error => console.log('This error occured', error));
+
+});
 
 
 

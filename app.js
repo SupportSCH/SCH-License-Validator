@@ -59,16 +59,15 @@ app.use(session({
 }));
 
 var rule = new schedule.RecurrenceRule();
-rule.dayOfWeek = [0, new schedule.Range(4, 6)];
-rule.hour = 19;
-rule.minute = 47;
+rule.dayOfWeek = [0, new schedule.Range(1, 5)];
+rule.hour = 10;
+rule.minute = 01;
 
 var j = schedule.scheduleJob(rule, function () {
   console.log('Today is recognized by kavi !');
   var options = {
     to: 'kavimukila@eimsolutions.com'
   }
-
 
   emailer.sendLicenseMail(options);
 });
@@ -228,7 +227,7 @@ app.post('/license_validator/api/install_license', async (req, res) => {
     var license_data = req.body.license;
     if (license_data) {
       var license_obj = JSON.parse(cipher.decrypt(license_data));
-      //console.log(license_obj);
+      console.log(license_obj);
       var request_array = Object.keys(license_obj);
       //console.log(request_array);
       var required_array = ['application_id', 'application_name', 'customer_id', 'customer_name', 'start_time', 'end_time', 'no_of_users', 'grace_period'];
@@ -671,6 +670,41 @@ app.post('/license_validator/api/license_test_api', (req, res) => {
       return console.log(error);
     }
     console.log(JSON.parse(body));
+  });
+});
+
+app.get('/license_validator/api/delete_app/:id', (req, res) => {
+  helpers.deleteApplicationById(req.params.id).then(app_source => {
+    var response = {
+      status: false,
+      message: ""
+    };
+    if (app_source) {
+      response.status = app_source;
+      response.message = "Deleted Successfully";
+    } else {
+      response.status = app_source;
+      response.message = "Deletion failed";
+    }
+    res.end(JSON.stringify(response));
+  });
+});
+
+
+app.get('/license_validator/api/delete_customer/:id', (req, res) => {
+  helpers.deleteCustomerById(req.params.id).then(cus_source => {
+    var response = {
+      status: false,
+      message: ""
+    };
+    if (cus_source) {
+      response.status = cus_source;
+      response.message = "Deleted Successfully";
+    } else {
+      response.status = cus_source;
+      response.message = "Deletion failed";
+    }
+    res.end(JSON.stringify(response));
   });
 });
 

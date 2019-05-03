@@ -1,7 +1,7 @@
 var Sequelize = require('sequelize');
 var config = require('./../config.js');
-var CustomerModel = require('./customer_master');
 var AppModel = require('./app_master');
+var CustomerModel = require('./customer_master');
 
 // create a sequelize instance with our local postgres database information.
 const sequelize = new Sequelize(config.mysql.database, config.mysql.user, config.mysql.password, {
@@ -68,18 +68,27 @@ var LicenseModel = sequelize.define('license_masters', {
 
 LicenseModel.belongsTo(AppModel, {
     foreignKey: 'app_id',
-    constraints: false
+    constraints: false,
+    onDelete: 'CASCADE',
+    hooks: true
 });
 
 LicenseModel.belongsTo(CustomerModel, {
     foreignKey: 'cust_id',
-    constraints: false
+    constraints: false,
+    onDelete: 'CASCADE',
+    hooks: true
+});
+
+sequelize.query('SET FOREIGN_KEY_CHECKS = 0;', {
+    raw: true
+}).then(function () {
+    sequelize.sync()
+        .then(() => console.log('license manager table has been successfully created, if one doesn\'t exist'))
+        .catch(error => console.log('This error occured', error));
 });
 
 // create all the defined tables in the specified database.
-sequelize.sync()
-    .then(() => console.log('license manager table has been successfully created, if one doesn\'t exist'))
-    .catch(error => console.log('This error occured', error));
 
 // export User model for use in other files.
 module.exports = LicenseModel;
