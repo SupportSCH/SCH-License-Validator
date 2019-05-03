@@ -5,16 +5,20 @@ var session = require('express-session');
 var morgan = require('morgan');
 var path = require('path');
 var User = require('./models/user');
+var TransSourceModel = require('./models/trans_source');
 var AppModel = require('./models/app_master');
 var CustomerModel = require('./models/customer_master');
 var LicenseModel = require('./models/license_manager');
+var DataSourcesModel = require('./models/data_source');
+var NotiModel = require('./models/notifications');
+var external = require('./external_db');
 var helpers = require('./helpers');
 var bcrypt = require('bcrypt');
 const fs = require('fs');
 const cipher = require('./cipher');
-//const si = require('systeminformation');
+var schedule = require('node-schedule');
 const mac_id = require('node-machine-id');
-//const filehelpers = require('./filehelpers');
+var emailer = require('./emailer');
 
 User.prototype.verifyPassword = function (password) {
   return bcrypt.compareSync(password, this.password);
@@ -23,7 +27,7 @@ User.prototype.verifyPassword = function (password) {
 // invoke an instance of express application.
 var app = express();
 // set our application port
-app.set('port', 8001);
+//app.set('port', 9001);
 
 // set morgan to log info about our requests for development use.
 app.use(morgan('dev'));
@@ -33,16 +37,15 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
-app.use('/static', express.static(path.join(__dirname, '/public/assets')));
-
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
-app.set('views', './public');
+app.set('views', './public/validator_html');
 
 // initialize cookie-parser to allow us access the cookies stored in the browser. 
 app.use(cookieParser());
 
-app.use(express.static(__dirname + '/public'));
+app.use('/assets', express.static(__dirname + '/public/assets'));
+app.use(express.static(__dirname + '/public/validator_html'));
 
 // initialize express-session to allow us track the logged-in user across sessions.
 app.use(session({
@@ -54,6 +57,21 @@ app.use(session({
     expires: 600000
   }
 }));
+
+var rule = new schedule.RecurrenceRule();
+rule.dayOfWeek = [0, new schedule.Range(4, 6)];
+rule.hour = 19;
+rule.minute = 47;
+
+var j = schedule.scheduleJob(rule, function () {
+  console.log('Today is recognized by kavi !');
+  var options = {
+    to: 'kavimukila@eimsolutions.com'
+  }
+
+
+  emailer.sendLicenseMail(options);
+});
 
 
 // This middleware will check if user's cookie is still saved in browser and user is not set, then automatically log the user out.
@@ -79,7 +97,11 @@ var sessionChecker = (req, res, next) => {
 
 // route for Home-Page
 app.get('/', sessionChecker, (req, res) => {
-  res.sendFile(__dirname + '/public/license-list.html');
+  res.sendFile(__dirname + '/public/validator_html/index.html');
+});
+
+app.get('license_validator', (req, res) => {
+  res.sendFile(__dirname + '/public/validator_html/index.html');
 });
 
 app.get('/lic_validator', (req, res) => {
@@ -196,7 +218,7 @@ app.post('/create_license', async (req, res) => {
   }
 });
 
-app.post('/install_license', (req, res) => {
+app.post('/license_validator/api/install_license', async (req, res) => {
   var response = {
     status: false,
     message: 'Invalid License'
@@ -209,20 +231,30 @@ app.post('/install_license', (req, res) => {
       //console.log(license_obj);
       var request_array = Object.keys(license_obj);
       //console.log(request_array);
-      var required_array = ['application_id', 'application_name', 'customer_id', 'customer_name', 'start_time', 'end_time', 'no_of_users'];
+      var required_array = ['application_id', 'application_name', 'customer_id', 'customer_name', 'start_time', 'end_time', 'no_of_users', 'grace_period'];
       var check_array_equals = helpers.arraysEqual(request_array, required_array);
       if (check_array_equals) {
-        var app_exists = helpers.getAppByAppId(license_obj.application_id).then(application => {
-          helpers.getCustomerByCustId(license_obj.customer_id).then(customer_id => {
-            return true;
-          });
+        var app_exists = await helpers.getAppByAppId(license_obj.application_id).then(async (application) => {
+          if (application) {
+            return await helpers.getCustomerByCustId(license_obj.customer_id).then(customer_id => {
+              if (customer_id) {
+                return true;
+              } else return false;
+            });
+          } else {
+            return false;
+          }
         });
+
+        console.log("app exists ? ");
+        console.log(app_exists);
 
         if (app_exists) {
           var upsert = {
             app_id: license_obj.application_id,
             cust_id: license_obj.customer_id,
             no_of_users: license_obj.no_of_users,
+            grace_period: license_obj.grace_period,
             license_start: helpers.formatMysqlDate(license_obj.start_time),
             license_end: helpers.formatMysqlDate(license_obj.end_time),
             license_key: license_data
@@ -246,7 +278,7 @@ app.post('/install_license', (req, res) => {
             }
           });
         } else {
-          response.message = "License details not found";
+          response.message = "Application or Customer details doesn't exists";
           res.end(JSON.stringify(response));
         }
       } else {
@@ -272,7 +304,7 @@ app.post('/install_license', (req, res) => {
 //   console.log(res);
 // }
 
-app.post('/validate_license', (req, res) => {
+app.post('/license_validator/api/validate_license', (req, res) => {
   var json = {
     status: true,
     reason: null
@@ -362,7 +394,7 @@ function validateBody(body, res, json) {
   return result;
 }
 
-app.post('/add_application', (req, res) => {
+app.post('/license_validator/api/add_application', (req, res) => {
   var response = {
     status: false,
     message: "Unable to insert application id"
@@ -394,7 +426,7 @@ app.post('/add_application', (req, res) => {
 
 
 
-app.post('/add_customer', (req, res) => {
+app.post('/license_validator/api/add_customer', (req, res) => {
   var response = {
     status: false,
     message: "Unable to insert application id"
@@ -426,7 +458,7 @@ app.post('/add_customer', (req, res) => {
 
 
 
-app.get('/get_apps', (req, res) => {
+app.get('/license_validator/api/get_apps', (req, res) => {
   helpers.getAllApps(1).then(application => {
     res.end(JSON.stringify(application));
   });
@@ -434,20 +466,20 @@ app.get('/get_apps', (req, res) => {
 
 
 
-app.get('/get_customer', (req, res) => {
+app.get('/license_validator/api/get_customer', (req, res) => {
   helpers.getAllCustomers(1).then(customers => {
     res.end(JSON.stringify(customers));
   });
 });
 
-app.get('/get_licenses', (req, res) => {
+app.get('/license_validator/api/get_licenses', (req, res) => {
   helpers.getAllLicense(1).then(licenses => {
     res.end(JSON.stringify(licenses));
   });
 });
 
 
-app.get('/license_details/:id', (req, res) => {
+app.get('/license_validator/api/license_details/:id', (req, res) => {
   helpers.getLicenseDataById(req.params.id).then(licenses => {
     //res.end(JSON.stringify(licenses));
     res.render(__dirname + "/public/license-details.html", {
@@ -465,6 +497,183 @@ app.get('/create_license', (req, res) => {
   }
 });
 
+// app.get('/', (req, res) => {
+//   res.sendFile(__dirname + '/public/data-source-list.html');
+// });
+
+app.get('/license_validator/api/get_data_source_list', (req, res) => {
+  helpers.getAllDataSources(1).then(data_sources => {
+    res.end(JSON.stringify(data_sources));
+  });
+});
+
+app.get('/license_validator/api/get_api_interface_list', (req, res) => {
+  helpers.getAllApiInterface(1).then(api_list => {
+    res.end(JSON.stringify(api_list));
+  });
+});
+
+app.get('/license_validator/api/get_trans_types', (req, res) => {
+  helpers.getAllTransTypes(1).then(data_sources => {
+    res.end(JSON.stringify(data_sources));
+  });
+});
+
+app.get('/license_validator/api/get_notifications', (req, res) => {
+  helpers.getAllNotifications(1).then(notification => {
+    console.log(notification);
+    res.end(JSON.stringify(notification));
+  });
+});
+
+app.post('/license_validator/api/add_data_source', (req, res) => {
+  var response = {
+    status: false,
+    message: "Unable to insert data source"
+  };
+  var request = req.body;
+  var upsert = {
+    ds_name: request.ds_name,
+    application_name: request.application_name,
+    app_id: request.app_id,
+    trans_id: request.trans_id,
+    host: request.host,
+    db_name: request.db_name,
+    tbl_name: request.tbl_name,
+    user_name: cipher.encrypt(request.user_name),
+    password: cipher.encrypt(request.password),
+  };
+  var match = {
+    app_id: request.app_id,
+    trans_id: request.trans_id
+  };
+
+  var insert = helpers.InsertDataSource(upsert, match).then(function (status) {
+    if (status) {
+      response.message = "Created successfully";
+      response.status = true;
+      res.end(JSON.stringify(response));
+    } else {
+      response.message = "Customer Already Exists";
+      response.status = false;
+      res.end(JSON.stringify(response));
+    }
+  }, (reason) => {
+    response.message = reason;
+    response.status = false;
+    res.end(JSON.stringify(response));
+  });
+});
+
+app.post('/license_validator/api/add_notification', (req, res) => {
+  var response = {
+    status: false,
+    message: "Unable to insert data source"
+  };
+  var request = req.body;
+  var upsert = {
+    ds_id: request.ds_id,
+    application_name: request.application_name,
+    email: request.email,
+    exp_period: request.exp_period,
+    grace_period: 10
+  };
+  var match = {};
+
+  var insert = helpers.InsertNotification(upsert, match).then(function (status) {
+    if (status) {
+      response.message = "Created successfully";
+      response.status = true;
+      res.end(JSON.stringify(response));
+    } else {
+      response.message = "Something went wrong";
+      response.status = false;
+      res.end(JSON.stringify(response));
+    }
+  }, (reason) => {
+    response.message = reason;
+    response.status = false;
+    res.end(JSON.stringify(response));
+  });
+});
+
+app.get('/license_validator/api/get_data_source_by_id/:id', (req, res) => {
+  helpers.getDataSourcesById(req.params.id).then(data_source => {
+    if (data_source) {
+      data_source.password = cipher.decrypt(data_source.password);
+      data_source.user_name = cipher.decrypt(data_source.user_name);
+      res.end(JSON.stringify(data_source));
+    } else {
+      res.end(null);
+    }
+  });
+});
+
+app.get('/license_validator/api/delete_data_source/:id', (req, res) => {
+  helpers.deleteDataSourceById(req.params.id).then(data_source => {
+    var response = {
+      status: false,
+      message: ""
+    };
+    if (data_source) {
+      response.status = data_source;
+      response.message = "Deleted Successfully";
+    } else {
+      response.status = data_source;
+      response.message = "Deletion failed";
+    }
+    res.end(JSON.stringify(response));
+  });
+});
+
+app.get('/license_validator/api/get_notification_by_id/:id', (req, res) => {
+  helpers.getNotificationById(req.params.id).then(noti_source => {
+    if (noti_source) {
+      res.end(JSON.stringify(noti_source));
+    } else {
+      res.end(null);
+    }
+  });
+});
+
+app.get('/license_validator/api/delete_notification/:id', (req, res) => {
+  helpers.deleteNotificationById(req.params.id).then(noti_source => {
+    var response = {
+      status: false,
+      message: ""
+    };
+    if (noti_source) {
+      response.status = noti_source;
+      response.message = "Deleted Successfully";
+    } else {
+      response.status = noti_source;
+      response.message = "Deletion failed";
+    }
+    res.end(JSON.stringify(response));
+  });
+});
+
+
+app.post('/license_validator/api/license_test_api', (req, res) => {
+  var body = req.body;
+  console.log(body);
+  Request.post({
+    "headers": {
+      "content-type": "application/json"
+    },
+    "url": body.url,
+    "body": JSON.stringify({
+      "application_name": body.application_name,
+      "user_count": 1
+    })
+  }, (error, response, body) => {
+    if (error) {
+      return console.log(error);
+    }
+    console.log(JSON.parse(body));
+  });
+});
+
 // route for user logout
 app.get('/logout', (req, res) => {
   if (req.session.user && req.cookies.user_sid) {
@@ -473,6 +682,10 @@ app.get('/logout', (req, res) => {
   } else {
     res.redirect('/login');
   }
+});
+
+app.get('/license_validator/api/check_noti', async (req, res) => {
+  await helpers.ProcessLicenseEmailJobs(res);
 });
 
 

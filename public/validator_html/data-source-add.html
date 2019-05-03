@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="loader" id="loaderurl" content="assets/img/loader.gif">
+<link rel="icon" type="image/png" href="assets/img/favicon.png" />
+<title>SCH License Manager</title>
+<link rel="stylesheet" href="assets/css/bootstrap.css">
+<link rel="stylesheet" href="assets/css/font-awesome-all.css">
+<link rel="stylesheet" href="assets/css/supplierhub.css?v=1.2">
+<link rel="stylesheet" href="assets/css/themes.css?v=1.2">
+</head>
+
+<body id="theme_sch">
+    <div id="app" class="bg_all">
+        <nav class="navbar navbar-default navbar-fixed-top header_bg_color_client bg-welcome-header">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <!-- Collapsed Hamburger -->
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#app-navbar-collapse">
+                        <span class="sr-only">Toggle Navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand sch_logo" href="#">
+                        <img src="assets/img/sch-logo-top.png" class="img-responsive">
+                    </a>
+                    <a id="sidebarCollapse" class="navbar-brand btn-expanded" role="button" data-toggle="dropdown">
+                        <span></span>
+                    </a>
+                </div>
+                <div class="collapse navbar-collapse" id="app-navbar-collapse">
+                    <ul class="nav navbar-nav">
+                    </ul>
+                    <!-- Right Side Of Navbar -->
+                    <ul class="nav navbar-nav navbar-right">
+                        <a class="navbar-brand dropdown">
+                            <img src="assets/img/default-profile.png" class="pull-left m_top_3">
+                            <ul class="pull-right topbar-logo">
+                                <li class="fontSize12">Arju Bhakat</li>
+                            </ul>
+                        </a>
+                        <a href="#" class="navbar-brand" role="button" data-toggle="dropdown" aria-expanded="false">
+                            <img src="assets/img/down-chevron.png" class="img-responsive m_top_4">
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="#" onclick="event.preventDefault();
+                                                document.getElementById('logout-form').submit();">
+                                    Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div id="wrapper">
+            <div id="sidebar-wrapper">
+                <div class="sidebar_menu_container">
+                    <div class="left">
+                        <a href="customer-list.html">
+                            <div class="item">
+                                <i class="fas fa-user"></i>
+                                <span>Customer</span>
+                            </div>
+                        </a>
+                        <a href="application-list.html">
+                            <div class="item">
+                                <i class="fab fa-app-store"></i>
+                                <span>Application</span>
+                            </div>
+                        </a>
+                        <a href="index.html">
+                            <div class="item active">
+                                <i class="fas fa-id-badge"></i>
+                                <span>License</span>
+                            </div>
+                        </a>
+                        <a href="data-source-list.html">
+                            <div class="item">
+                                <i class="fas fa-database"></i>
+                                <span>Data Source</span>
+                            </div>
+                        </a>
+                        <!-- <a href="notify-settings-list.html">
+                                    <div class="item">
+                                        <i class="fas fa-toolbox"></i>
+                                        <span>Notif. Settings</span>
+                                    </div>
+                                </a>
+                                <a href="data-source-list.html">
+                                    <div class="item">
+                                        <i class="fas fa-database"></i>
+                                        <span>Data Source</span>
+                                    </div>
+                                </a> -->
+                        <a href="notify-settings-list.html">
+                            <div class="item">
+                                <i class="fas fa-toolbox"></i>
+                                <span>Notif. Settings</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div id="page-content-wrapper">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_top_20">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <i class="fas fa-toolbox"></i> &nbsp;Add Data Source
+                                    <a class="panel-a-href pull-right" href="data-source-list.html"><i
+                                            class="fas fa-angle-double-left"></i> Back to List</a>
+                                </div>
+                                <div class="panel-body m_top_15">
+                                    <form id="datasource_create" action="#" method="POST">
+                                        <div class="col-md-6 col-xs-12">
+                                            <div class="md-input">
+                                                <select name="type" id="app_name" name='application_name'
+                                                    class="md-form-control select-control">
+                                                    <option value="">SELECT APP</option>
+                                                </select>
+
+                                                <span class="highlight"></span>
+                                                <span class="bar"></span>
+                                            </div>
+                                        </div>
+                                        <!-- <div class="col-md-6 col-xs-12">
+                                            <div class="md-input">
+                                                <select name="type" id="trans_types" class="md-form-control">
+                                                    <option value="">SELECT TYPE</option>
+                                                </select>
+                                                <span class="highlight"></span>
+                                                <span class="bar"></span>
+                                            </div>
+                                        </div> -->
+                                        <div class="col-md-6 col-xs-12">
+                                            <div class="md-input">
+                                                <input id="ds_name" type="text" name='ds_name'
+                                                    class="md-form-control" />
+                                                <span class="highlight"></span>
+                                                <span class="bar"></span>
+                                                <label>DATA SOURCE NAME</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-xs-12">
+                                            <div class="md-input">
+                                                <input id="host" type="text" name='host' class="md-form-control" />
+                                                <span class="highlight"></span>
+                                                <span class="bar"></span>
+                                                <label>HOST NAME</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-xs-12">
+                                            <div class="md-input">
+                                                <input id="db_name" type="text" name='database_name'
+                                                    class="md-form-control" />
+                                                <span class="highlight"></span>
+                                                <span class="bar"></span>
+                                                <label>Database Name</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-xs-12">
+                                            <div class="md-input">
+                                                <input id="tbl_name" type="text" name='table_name'
+                                                    class="md-form-control" />
+                                                <span class="highlight"></span>
+                                                <span class="bar"></span>
+                                                <label>Table Name</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-xs-12">
+                                            <div class="md-input">
+                                                <input id="user_name" type="text" name='username'
+                                                    class="md-form-control" />
+                                                <span class="highlight"></span>
+                                                <span class="bar"></span>
+                                                <label>Username</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-xs-12">
+                                            <div class="md-input">
+                                                <input id="password" type="password" name='password'
+                                                    class="md-form-control" />
+                                                <span class="highlight"></span>
+                                                <span class="bar"></span>
+                                                <label>Password</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-xs-12">
+                                            <input class="btn btn-success" type="submit" value="Submit">
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="footer" class="hccbpl">
+        <img src="assets/img/sch_logo.png" class="img-responsive">
+    </div>
+    <!-- Scripts -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/jquery-ui.min.js"></script>
+    <script src="assets/js/sweetalert.min.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+    <script src="assets/js/supplierhub.js"></script>
+    <script>
+        $(document).ready(function () {
+            // $.get("/license_validator/api/get_trans_types", function (data, status) {
+            //     var str = "<option value='0'>SELECT APP</option>";
+            //     data = JSON.parse(data);
+            //     if (data.length > 0) {
+            //         for (var i = 0; i < data.length; i++) {
+            //             str += '<option value="' + data[i].id + '">' + data[i].trans_name + '</option>';
+            //         }
+            //     }
+            //     $('#trans_types').html(str);
+            // });
+
+            $.get("/license_validator/api/get_apps", function (data, status) {
+                var str = "<option value='0'>SELECT APP</option>";
+                data = JSON.parse(data);
+                if (data.length > 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        str += '<option value="' + data[i].app_id + '">' + data[i].app_name +
+                            '</option>';
+                    }
+                }
+                $('#app_name').html(str);
+            });
+        });
+
+        $("#datasource_create").submit(function (event) {
+            event.preventDefault();
+            $.post("/license_validator/api/add_data_source", {
+                    application_name: $("#app_name option:selected").text(),
+                    app_id: $('#app_name').val(),
+                    ds_name: $('#ds_name').val(),
+                    trans_id: 1,
+                    host: $('#host').val(),
+                    db_name: $('#db_name').val(),
+                    tbl_name: $('#tbl_name').val(),
+                    user_name: $('#user_name').val(),
+                    password: $('#password').val(),
+                },
+                function (data, status) {
+                    data = JSON.parse(data);
+                    if (data.status) {
+                        swal({
+                            title: "Success",
+                            text: data.message,
+                            icon: "success",
+                        });
+                        $('#app_name').val("");
+                        $('#db_name').val("");
+                        $('#tbl_name').val("");
+                        $('#user_name').val("");
+                        $('#password').val("");
+                    } else {
+                        swal({
+                            title: "Failed",
+                            text: data.message,
+                            icon: "error",
+                        });
+                    }
+                });
+        });
+    </script>
+</body>
+
+</html>

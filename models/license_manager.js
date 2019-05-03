@@ -36,6 +36,10 @@ var LicenseModel = sequelize.define('license_masters', {
         type: Sequelize.INTEGER,
         allowNull: false
     },
+    grace_period: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+    },
     license_start: {
         type: 'TIMESTAMP',
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
@@ -63,10 +67,13 @@ var LicenseModel = sequelize.define('license_masters', {
 });
 
 LicenseModel.belongsTo(AppModel, {
-    foreignKey: 'app_id'
+    foreignKey: 'app_id',
+    constraints: false
 });
+
 LicenseModel.belongsTo(CustomerModel, {
-    foreignKey: 'cust_id'
+    foreignKey: 'cust_id',
+    constraints: false
 });
 
 // create all the defined tables in the specified database.

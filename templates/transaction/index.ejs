@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Email Template</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+		a {
+			background-color: transparent;
+		}
+
+		a:active,
+		a:hover {
+			outline: 0;
+		}
+
+		img {
+			border: 0;
+		}
+
+		table {
+			border-spacing: 0;
+			border-collapse: collapse;
+		}
+
+		td {
+			padding: 0;
+		}
+
+		a,
+		a:visited {
+			text-decoration: underline;
+		}
+
+		a[href]:after {
+			content: " ("attr(href) ")";
+		}
+
+		img,
+		tr {
+			page-break-inside: avoid;
+		}
+
+		img {
+			max-width: 100% !important;
+		}
+
+		p {
+			orphans: 3;
+			widows: 3;
+		}
+
+		* {
+			-webkit-box-sizing: border-box;
+			-moz-box-sizing: border-box;
+			box-sizing: border-box;
+		}
+
+		:after,
+		:before {
+			-webkit-box-sizing: border-box;
+			-moz-box-sizing: border-box;
+			box-sizing: border-box;
+		}
+
+		a {
+			color: #337ab7;
+			text-decoration: none;
+		}
+
+		a:focus,
+		a:hover {
+			color: #23527c;
+			text-decoration: underline;
+		}
+
+		a:focus {
+			outline: 5px auto -webkit-focus-ring-color;
+			outline-offset: -2px;
+		}
+
+		img {
+			vertical-align: middle;
+		}
+
+		.img-responsive {
+			display: block;
+			max-width: 100%;
+			height: auto;
+		}
+
+		h4 {
+			font-family: inherit;
+			font-weight: 500;
+			line-height: 1.1;
+			color: inherit;
+		}
+
+		h4 {
+			margin-top: 10px;
+			margin-bottom: 10px;
+		}
+
+		h4 {
+			font-size: 18px;
+		}
+
+		p {
+			margin: 0 0 10px;
+		}
+
+		.row {
+			margin-right: -15px;
+			margin-left: -15px;
+		}
+
+		.col-lg-4,
+		.col-sm-6,
+		.col-xs-12 {
+			position: relative;
+			min-height: 1px;
+			padding-right: 15px;
+			padding-left: 15px;
+		}
+
+		.col-xs-12 {
+			float: left;
+		}
+
+		.col-xs-12 {
+			width: 100%;
+		}
+
+		@media (min-width:768px) {
+
+			.col-sm-6 {
+				float: left;
+			}
+
+			.col-sm-6 {
+				width: 50%;
+			}
+
+		}
+
+		@media (min-width:1200px) {
+
+			.col-lg-4 {
+				float: left;
+			}
+
+			.col-lg-4 {
+				width: 33.33333333%;
+			}
+
+		}
+
+		table {
+			background-color: transparent;
+		}
+
+		.row:after,
+		.row:before {
+			display: table;
+			content: " ";
+		}
+
+		.row:after {
+			clear: both;
+		}
+
+		.pull-right {
+			float: right !important;
+		}
+
+		.pull-left {
+			float: left !important;
+		}
+
+		/*! CSS Used from: Embedded */
+		.tdMargin {
+			padding: 25px 30px;
+		}
+
+		.inner-element {
+			padding: 30px 25px 20px;
+			background-color: #fff;
+			border-radius: 6px;
+		}
+
+		.footerText {
+			margin: 30px 0 10px;
+			text-align: left;
+			color: #555;
+			font-size: 14px;
+		}
+
+		.footerCopyright {
+			background: #196eb7;
+			color: #dedede;
+			text-align: center;
+			font-size: 11px;
+			padding: 15px;
+		}
+
+		p.dear-part {
+			color: #0c3785;
+			font-size: 15px;
+			text-align: left;
+			margin: 80px 0 20px;
+		}
+
+		p.body-part {
+			color: #555;
+			font-size: 15px;
+			text-align: left;
+		}
+
+		.font-weight-bold {
+			font-weight: bold;
+		}
+
+		.m_top_20 {
+			margin-top: 20px;
+		}
+
+		.dashboard .card {
+			box-shadow: 0 15px 25px 0 rgba(36, 50, 66, .14);
+			background-color: #FFFFFF;
+			border-radius: 6px;
+			min-height: 175px;
+			margin-bottom: 10px;
+			word-wrap: break-word;
+		}
+
+		.card .header {
+			border-top-left-radius: 6px;
+			border-top-right-radius: 6px;
+		}
+
+		.card.bg-1 {
+			border-bottom: 2px solid #42c4de;
+		}
+
+		.card.bg-1 .header {
+			background: linear-gradient(to right, #36D1DC 0%, #5B86E5 0%, #36D1DC 100%);
+		}
+
+		.card .header .stats {
+			color: #fff;
+			font-weight: 500;
+			font-size: 16px;
+			text-align: center;
+			padding: 10px 4px;
+		}
+
+		.card .content {
+			padding: 18px 15px;
+		}
+
+		.card .content .box-body {
+			color: #73879C;
+			font-weight: normal;
+		}
+
+		.card .box-body .name {
+			float: left;
+			margin-top: 5px;
+			font-size: 16px;
+			display: block;
+			width: 150px;
+			word-wrap: break-word;
+		}
+
+		.card .box-body .value {
+			
+			margin-top: 5px;
+			font-size: 16px;
+			display: block;
+			
+			word-wrap: break-word;
+		}
+
+		@media (max-width:1300px) {
+
+			.card .header .stats {
+				font-size: 15px;
+				text-align: center;
+			}
+
+			.card .content {
+				padding: 15px 12px;
+			}
+
+			.card .box-body .name {
+				margin-top: 7px;
+				font-size: 13px;
+			}
+
+		}
+	</style>
+</head>
+
+<body>
+
+	<table id="start_table_body" width="700px" border="0" cellpadding="0" cellspacing="0" align="center"
+		style="min-width:850px">
+		<tbody>
+			<tr>
+				<td bgcolor="#f5f7f9" valign="middle" style="box-sizing:border-box">
+					<table width="100%" border="0" cellpadding="0" cellspacing="0">
+						<tbody>
+							<tr>
+								<td valign="top" align="center" class="tdMargin">
+									<!--<p style="margin:0"><img src="assets/img/strip_top.png" width="100%" style="display:block" class="CToWUd"></p>-->
+									<table bgcolor="#fff" width="100%" cellpadding="0" cellspacing="0">
+										<tbody>
+											<tr>
+												<td valign="top" align="center" class="inner-element">
+													<h4 class="pull-left font-weight-bold">LICENSE MANAGER</h4>
+													<img src="https://nrrvcp.supplychainh.com/img/sch-logo-top.png"
+														class="img-responsive pull-right">
+													<p class="dear-part">Dear Customer,</p>
+													<p class="body-part">This is a license expiration notification.</p>
+													<p class="body-part">License of the solution SCH
+														<%= application_name %> is expiring in <%= license_days %> days
+														on <%= end_date %></p>
+													<p class="body-part font-weight-bold">Kindly renew the subscription.
+													</p>
+													<p class="body-part m_top_20">The solution has so far helped your
+														business on the following items :</p>
+													<div class="row m_top_20 dashboard">
+														<% for (var key in trans_data) { %>
+														<% if(trans_data.hasOwnProperty(key)) { %>
+														<div class="col-lg-4 col-sm-6">
+															<div class="card bg-1">
+																<div class="header">
+																	<div class="stats">
+																		<i class="fas fa-cart-arrow-down"></i>
+																		<%= key.toUpperCase() %>
+																	</div>
+																</div>
+																<div class="content">
+																	<div class="row">
+																		<div class="box-body">
+																			<% var data = trans_data[key]; %>
+																			<% for(var i = 0 ; i < trans_data[key].length; i++) { %>
+																			<% var arr = trans_data[key][i]; %>
+																			<div class="col-xs-12">
+																				<span class='name'
+																					style="text-align: left">
+																					<%= arr.parameter_value.toUpperCase() %></span>
+																				<span class='value'
+																					style="text-align: right">
+																					<%= relativeNumber(arr.value); %>
+																				</span>
+																			</div>
+																			<% } %>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<% } %>
+														<% } %>
+
+
+														<p class="footerText">Regards,<br>Supply Chain Hub Team</p>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+									<!--<p style="margin:0"><img src="assets/img/strip_bottom.png" width="100%" style="display:block" class="CToWUd"></p>-->
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td valign="middle">
+					<table width="100%" cellpadding="0" cellspacing="0" border="0">
+						<tbody>
+							<tr>
+								<td class="footerCopyright">Copyright © 2019 <a href="https://supplychainh.com/"
+										style="color:#fff;" target="_blank">SCH License Manager</a> | All Rights
+									Reserved.</td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+</body>
+
+</html>
