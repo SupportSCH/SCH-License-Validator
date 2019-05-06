@@ -383,7 +383,7 @@ async function ProcessLicenseEmailJobs(res) {
                     status: true
                 };
 
-                if (between(diff_days, noti.exp_period, diff_days)) {
+                if (between(noti.exp_period, diff_days, noti.exp_period)) {
                     noti.data_source.user_name = cipher.decrypt(noti.data_source.user_name);
                     noti.data_source.password = cipher.decrypt(noti.data_source.password);
                     var trans_data = await external.GetExternalTransactionData(noti.data_source);
