@@ -398,12 +398,16 @@ async function ProcessLicenseEmailJobs(res) {
                         trans_data: final_gby
                     };
                     await emailer.sendLicenseMail(options);
-                    res.end(JSON.stringify(stat));
+                    if (res) {
+                        res.end(JSON.stringify(stat));
+                    }
                 } else {
                     console.log("exp period: " + noti.exp_period);
                     console.log("diff_days: " + diff_days);
                     stat.status = false;
-                    res.end(JSON.stringify(stat));
+                    if (res) {
+                        res.end(JSON.stringify(stat));
+                    }
                 }
             });
         });
@@ -412,7 +416,7 @@ async function ProcessLicenseEmailJobs(res) {
 
 function between(x, min, max) {
     return x >= min && x <= max;
-  }
+}
 
 const groupByKey = key => array =>
     array.reduce((objectsByKeyValue, obj) => {

@@ -62,25 +62,25 @@ exports.sendLicenseMail = async function (options) {
         }
     };
 
-    var html = ejs.render(html_file, locals);
-    ejs.renderFile(__dirname + '/templates/transaction/index.ejs', locals, function (err, str) {
-        fh.writeFile(__dirname + "/public/ren.html", str);
-        const mailOptions = {
-            from: config.email.from, // sender address
-            to: options.to, // list of receivers
-            subject: 'LICENSE MANAGEMENT', // Subject line
-            html: html // plain text body
-        };
+    // var html = ejs.render(html_file, locals);
+    // ejs.renderFile(__dirname + '/templates/transaction/index.ejs', locals, function (err, str) {
+    //     fh.writeFile(__dirname + "/public/ren.html", str);
+    //     const mailOptions = {
+    //         from: config.email.from, // sender address
+    //         to: options.to, // list of receivers
+    //         subject: 'LICENSE MANAGEMENT', // Subject line
+    //         html: html // plain text body
+    //     };
 
-        fh.writeFile(__dirname + "/public/ren2.html", html);
+    //     fh.writeFile(__dirname + "/public/ren2.html", html);
 
-        transporter.sendMail(mailOptions, function (err, info) {
-            if (err)
-                console.log(err)
-            else
-                console.log(info);
-        });
-    });
+    //     transporter.sendMail(mailOptions, function (err, info) {
+    //         if (err)
+    //             console.log(err)
+    //         else
+    //             console.log(info);
+    //     });
+    // });
 
     email_temp_dir
         .render('transaction', {

@@ -19,6 +19,8 @@ const cipher = require('./cipher');
 var schedule = require('node-schedule');
 const mac_id = require('node-machine-id');
 var emailer = require('./emailer');
+var config = require('./config');
+var job = null;
 
 User.prototype.verifyPassword = function (password) {
   return bcrypt.compareSync(password, this.password);
@@ -60,16 +62,12 @@ app.use(session({
 
 var rule = new schedule.RecurrenceRule();
 rule.dayOfWeek = [0, new schedule.Range(1, 5)];
-rule.hour = 10;
-rule.minute = 01;
+rule.hour = config.schedule.hour;
+rule.minute = config.schedule.minute;
 
-var j = schedule.scheduleJob(rule, function () {
-  console.log('Today is recognized by kavi !');
-  var options = {
-    to: 'kavimukila@eimsolutions.com'
-  }
-
-  emailer.sendLicenseMail(options);
+var job = schedule.scheduleJob(rule, async function () {
+  //console.log('Today is recognized by kavi !');
+  await helpers.ProcessLicenseEmailJobs(null);
 });
 
 
