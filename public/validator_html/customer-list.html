@@ -164,7 +164,7 @@
                 if (data.length > 0) {
                     for (var i = 0; i < data.length; i++) {
                         str += "<tr><td>" + data[i].cust_id + "</td>" + "<td>" + data[i].cust_name +
-                            "</td>" + "<td><button onclick='delete_customer(" + data[i].cust_id +
+                            "</td>" + "<td><button onclick='delete_customer(" + '"' + data[i].cust_id + '"' +
                             ")'" + " class='btn btn-danger btn-xs' title='Delete'>" +
                             "<i class='fas fa-trash'></i></button></td></tr>";
                     }
