@@ -62,8 +62,8 @@
             <div id="sidebar-wrapper">
                 <div class="sidebar_menu_container">
                     <div class="left">
-                        <a href="customer-list.html">
-                            <div class="item">
+                        <a href="index.html">
+                            <div class="item active">
                                 <i class="fas fa-user"></i>
                                 <span>Customer</span>
                             </div>
@@ -74,8 +74,8 @@
                                 <span>Application</span>
                             </div>
                         </a>
-                        <a href="index.html">
-                            <div class="item active">
+                        <a href="license-list.html">
+                            <div class="item">
                                 <i class="fas fa-id-badge"></i>
                                 <span>License</span>
                             </div>
@@ -87,17 +87,17 @@
                             </div>
                         </a>
                         <!-- <a href="notify-settings-list.html">
-                            <div class="item">
-                                <i class="fas fa-toolbox"></i>
-                                <span>Notif. Settings</span>
-                            </div>
-                        </a>
-                        <a href="data-source-list.html">
-                            <div class="item">
-                                <i class="fas fa-database"></i>
-                                <span>Data Source</span>
-                            </div>
-                        </a> -->
+                                    <div class="item">
+                                        <i class="fas fa-toolbox"></i>
+                                        <span>Notif. Settings</span>
+                                    </div>
+                                </a>
+                                <a href="data-source-list.html">
+                                    <div class="item">
+                                        <i class="fas fa-database"></i>
+                                        <span>Data Source</span>
+                                    </div>
+                                </a> -->
                         <a href="notify-settings-list.html">
                             <div class="item">
                                 <i class="fas fa-toolbox"></i>
@@ -107,40 +107,31 @@
                     </div>
                 </div>
             </div>
-
             <div id="page-content-wrapper">
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_top_20">
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
-                                    <i class="fas fa-key"></i> &nbsp;List of License
-                                    <a class="panel-a-href pull-right" href="license-install.html"><i
-                                            class="fas fa-user-plus"></i> Enter License</a>
+                                    <i class="fas fa-user"></i> &nbsp;Customer List
+                                    <a class="panel-a-href pull-right" href="customer-create.html"><i
+                                            class="fas fa-user-plus"></i> Create Customer</a>
                                 </div>
                                 <div class="panel-body">
                                     <div class="table-responsive">
                                         <table class="table table-hover" cellspacing="0" width="100%">
                                             <thead>
                                                 <tr>
-                                                    <th>Application Name</th>
+                                                    <th>ID</th>
                                                     <th>Customer Name</th>
-                                                    <th>License Start</th>
-                                                    <th>License End</th>
-                                                    <th>No. of Users</th>
-                                                    <th>Action</th>
+													<th>Action</th>
                                                 </tr>
                                             </thead>
-                                            <tbody id="licenses_list">
-                                                <tr>
+                                            <tbody id="customer_list">
+                                                <!-- <tr>
+                                                    <td>001</td>
                                                     <td>Test 1</td>
-                                                    <td>EIMS</td>
-                                                    <td>10-Apr-2019</td>
-                                                    <td>15-Apr-2019</td>
-                                                    <td>50</td>
-                                                    <td><a href="license-details.html" class="btn btn-info btn-xs"
-                                                            title="License Details"><i class="fas fa-eye"></i></td>
-                                                </tr>
+                                                </tr> -->
                                             </tbody>
                                         </table>
                                     </div>
@@ -167,28 +158,39 @@
         });
 		
 		function load_ui() {
-		$.get("/license_validator/api/get_licenses", function (data, status) {
+		$.get("/license_validator/api/get_customer", function (data, status) {
                 var str = "";
                 data = JSON.parse(data);
                 if (data.length > 0) {
                     for (var i = 0; i < data.length; i++) {
-                        str += "<tr><td>" + data[i].app_master.app_name + "</td>" + "<td>" + data[i]
-                            .customer_master.cust_name +
-                            "</td>" + "<td>" + GetFormattedDate(data[i].license_start) + "</td>" +
-                            "<td>" + GetFormattedDate(data[i].license_end) + "</td>" +
-                            "<td>" + data[i].no_of_users + "<td>" +
-                            "<td>" + "<a href='/license_details/" + data[i].id +
-                            "' class='btn btn-info btn-xs' title='License Details'> <i class='fas fa-eye'></i></a> </tr></td>";
+                        str += "<tr><td>" + data[i].cust_id + "</td>" + "<td>" + data[i].cust_name +
+                            "</td>" + "<td><button onclick='delete_customer(" + '"' + data[i].cust_id + '"' +
+                            ")'" + " class='btn btn-danger btn-xs' title='Delete'>" +
+                            "<i class='fas fa-trash'></i></button></td></tr>";
                     }
                 }
-                $('#licenses_list').html(str);
+                $('#customer_list').html(str);
             });
 		}
-
-        function GetFormattedDate(date) {
-            var d = new Date(date);
-            var final = d.getDate().toString() + '-' + (d.getMonth() + 1).toString() + '-' + d.getFullYear().toString();
-            return final;
+		
+		function delete_customer(id) {
+            $.get("/license_validator/api/delete_customer/" + id, function (data, status) {
+                data = JSON.parse(data);
+                if (data.status) {
+                    load_ui();
+                    swal({
+                        title: "Success",
+                        text: data.message,
+                        icon: "success",
+                    });
+                } else {
+                    swal({
+                        title: "Failed",
+                        text: data.message,
+                        icon: "error",
+                    });
+                }
+            });
         }
     </script>
 </body>

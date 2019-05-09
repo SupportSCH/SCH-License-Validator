@@ -62,7 +62,7 @@
             <div id="sidebar-wrapper">
                 <div class="sidebar_menu_container">
                     <div class="left">
-                        <a href="customer-list.html">
+                        <a href="index.html">
                             <div class="item active">
                                 <i class="fas fa-user"></i>
                                 <span>Customer</span>
@@ -74,7 +74,7 @@
                                 <span>Application</span>
                             </div>
                         </a>
-                        <a href="index.html">
+                        <a href="license-list.html">
                             <div class="item">
                                 <i class="fas fa-id-badge"></i>
                                 <span>License</span>
@@ -114,7 +114,7 @@
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <i class="fas fa-user"></i> &nbsp;Create Customer
-                                    <a class="panel-a-href pull-right" href="customer-list.html"><i
+                                    <a class="panel-a-href pull-right" href="index.html"><i
                                             class="fas fa-angle-double-left"></i> Back to List</a>
                                 </div>
                                 <div class="panel-body m_top_15">
@@ -160,6 +160,27 @@
     <script src="assets/js/supplierhub.js"></script>
     <script>
         $("#create_customer").submit(function (event) {
+
+            if ($('#c_id').val().length === 0) {
+                swal({
+                    title: "Info",
+                    text: "Please enter customer id",
+                    icon: "error",
+                });
+
+                return;
+            }
+
+            if ($('#c_name').val().length === 0) {
+                swal({
+                    title: "Info",
+                    text: "Please enter customer name",
+                    icon: "error",
+                });
+
+                return;
+            }
+
             $.post("/license_validator/api/add_customer", {
                     customer_id: $('#c_id').val(),
                     customer_name: $('#c_name').val()

@@ -62,7 +62,7 @@
             <div id="sidebar-wrapper">
                 <div class="sidebar_menu_container">
                     <div class="left">
-                        <a href="customer-list.html">
+                        <a href="index.html">
                             <div class="item">
                                 <i class="fas fa-user"></i>
                                 <span>Customer</span>
@@ -74,7 +74,7 @@
                                 <span>Application</span>
                             </div>
                         </a>
-                        <a href="index.html">
+                        <a href="license-list.html">
                             <div class="item">
                                 <i class="fas fa-id-badge"></i>
                                 <span>License</span>
@@ -242,6 +242,9 @@
 
             $("#add_notification").submit(function (event) {
                 event.preventDefault();
+
+                
+
                 $.post("/license_validator/api/add_notification", {
                         ds_id: $('#data_sources_list').val(),
                         application_name: $('#data_sources_list :selected').text(),

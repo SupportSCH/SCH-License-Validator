@@ -94,11 +94,11 @@ var sessionChecker = (req, res, next) => {
 
 // route for Home-Page
 app.get('/', sessionChecker, (req, res) => {
-  res.sendFile(__dirname + '/public/validator_html/index.html');
+  res.sendFile(__dirname + '/public/validator_html/license-list.html');
 });
 
 app.get('license_validator', (req, res) => {
-  res.sendFile(__dirname + '/public/validator_html/index.html');
+  res.sendFile(__dirname + '/public/validator_html/license-list.html');
 });
 
 app.get('/lic_validator', (req, res) => {

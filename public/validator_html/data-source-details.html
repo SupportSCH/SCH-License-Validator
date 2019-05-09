@@ -62,7 +62,7 @@
             <div id="sidebar-wrapper">
                 <div class="sidebar_menu_container">
                     <div class="left">
-                        <a href="customer-list.html">
+                        <a href="index.html">
                             <div class="item">
                                 <i class="fas fa-user"></i>
                                 <span>Customer</span>
@@ -74,7 +74,7 @@
                                 <span>Application</span>
                             </div>
                         </a>
-                        <a href="index.html">
+                        <a href="license-list.html">
                             <div class="item">
                                 <i class="fas fa-id-badge"></i>
                                 <span>License</span>
@@ -127,7 +127,7 @@
                                             <label class="readonly">Application Name</label>
                                         </div>
                                     </div>
-                                    <div class="col-md-6 col-xs-12">
+                                    <!-- <div class="col-md-6 col-xs-12">
                                         <div class="md-input">
                                             <input id="trans_type" type="text" name='type' class="md-form-control"
                                                 readonly />
@@ -135,7 +135,7 @@
                                             <span class="bar"></span>
                                             <label class="readonly">Type</label>
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <div class="col-md-6 col-xs-12">
                                         <div class="md-input">
                                             <input id="db_name" type="text" name='database_name' class="md-form-control"
@@ -165,7 +165,7 @@
                                     </div>
                                     <div class="col-md-6 col-xs-12">
                                         <div class="md-input">
-                                            <input id="password" type="text" name='password' class="md-form-control"
+                                            <input id="password" type="password" name='password' class="md-form-control"
                                                 readonly />
                                             <span class="highlight"></span>
                                             <span class="bar"></span>
@@ -199,7 +199,7 @@
                 data = JSON.parse(data);
                 if (data) {
                     $('#app_name').val(data.application_name);
-                    $('#trans_type').val(data.trans_source.trans_name);
+                    //$('#trans_type').val(data.trans_source.trans_name);
                     $('#db_name').val(data.db_name);
                     $('#tbl_name').val(data.tbl_name);
                     $('#user_name').val(data.user_name);

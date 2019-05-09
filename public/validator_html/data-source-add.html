@@ -62,7 +62,7 @@
             <div id="sidebar-wrapper">
                 <div class="sidebar_menu_container">
                     <div class="left">
-                        <a href="customer-list.html">
+                        <a href="index.html">
                             <div class="item">
                                 <i class="fas fa-user"></i>
                                 <span>Customer</span>
@@ -74,7 +74,7 @@
                                 <span>Application</span>
                             </div>
                         </a>
-                        <a href="index.html">
+                        <a href="license-list.html">
                             <div class="item">
                                 <i class="fas fa-id-badge"></i>
                                 <span>License</span>
@@ -171,7 +171,7 @@
                                                     class="md-form-control" />
                                                 <span class="highlight"></span>
                                                 <span class="bar"></span>
-                                                <label>Table Name</label>
+                                                <label>Table/View Name</label>
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-xs-12">
@@ -241,6 +241,77 @@
 
         $("#datasource_create").submit(function (event) {
             event.preventDefault();
+
+            if ($('#app_name').val() == "0") {
+                swal({
+                    title: "Info",
+                    text: "Please select app",
+                    icon: "error",
+                });
+
+                return;
+            }
+
+            if ($('#ds_name').val().length === 0) {
+                swal({
+                    title: "Info",
+                    text: "Please enter data source name",
+                    icon: "error",
+                });
+
+                return;
+            }
+
+            if ($('#host').val().length === 0) {
+                swal({
+                    title: "Info",
+                    text: "Please enter host name",
+                    icon: "error",
+                });
+
+                return;
+            }
+
+            if ($('#db_name').val().length === 0) {
+                swal({
+                    title: "Info",
+                    text: "Please database name",
+                    icon: "error",
+                });
+
+                return;
+            }
+
+            if ($('#tbl_name').val().length === 0) {
+                swal({
+                    title: "Info",
+                    text: "Please table or view name",
+                    icon: "error",
+                });
+
+                return;
+            }
+
+            if ($('#user_name').val().length === 0) {
+                swal({
+                    title: "Info",
+                    text: "Please user name",
+                    icon: "error",
+                });
+
+                return;
+            }
+
+            if ($('#password').val().length === 0) {
+                swal({
+                    title: "Info",
+                    text: "Please enter password",
+                    icon: "error",
+                });
+
+                return;
+            }
+
             $.post("/license_validator/api/add_data_source", {
                     application_name: $("#app_name option:selected").text(),
                     app_id: $('#app_name').val(),
