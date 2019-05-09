@@ -242,9 +242,6 @@
 
             $("#add_notification").submit(function (event) {
                 event.preventDefault();
-
-                
-
                 $.post("/license_validator/api/add_notification", {
                         ds_id: $('#data_sources_list').val(),
                         application_name: $('#data_sources_list :selected').text(),

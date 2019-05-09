@@ -151,7 +151,7 @@
     <script src="assets/js/supplierhub.js"></script>
     <script>
         $("#application_creation").submit(function (event) {
-
+            event.preventDefault();
             if ($('#app_id').val().length === 0) {
                 swal({
                     title: "Info",
@@ -194,7 +194,7 @@
                 });
             $('#app_id').val("");
             $('#app_name').val("");
-            event.preventDefault();
+            
         });
 
         $(".datePicker").datepicker({
