@@ -224,58 +224,62 @@ app.post('/license_validator/api/install_license', async (req, res) => {
   if (req.body.hasOwnProperty('license')) {
     var license_data = req.body.license;
     if (license_data) {
-      var license_obj = JSON.parse(cipher.decrypt(license_data));
-      console.log(license_obj);
-      var request_array = Object.keys(license_obj);
-      //console.log(request_array);
-      var required_array = ['application_id', 'application_name', 'customer_id', 'customer_name', 'start_time', 'end_time', 'no_of_users', 'grace_period'];
-      var check_array_equals = helpers.arraysEqual(request_array, required_array);
-      if (check_array_equals) {
-        var app_exists = await helpers.getAppByAppId(license_obj.application_id).then(async (application) => {
-          if (application) {
-            return await helpers.getCustomerByCustId(license_obj.customer_id).then(customer_id => {
-              if (customer_id) {
-                return true;
-              } else return false;
-            });
-          } else {
-            return false;
-          }
-        });
+      var decrypt = cipher.decrypt(license_data);
+      if (decrypt) {
+        var license_obj = JSON.parse(cipher.decrypt(license_data));
+        console.log(license_obj);
+        var request_array = Object.keys(license_obj);
+        //console.log(request_array);
+        var required_array = ['application_id', 'application_name', 'customer_id', 'customer_name', 'start_time', 'end_time', 'no_of_users', 'grace_period'];
+        var check_array_equals = helpers.arraysEqual(request_array, required_array);
 
-        console.log("app exists ? ");
-        console.log(app_exists);
-
-        if (app_exists) {
-          var upsert = {
-            app_id: license_obj.application_id,
-            cust_id: license_obj.customer_id,
-            no_of_users: license_obj.no_of_users,
-            grace_period: license_obj.grace_period,
-            license_start: helpers.formatMysqlDate(license_obj.start_time),
-            license_end: helpers.formatMysqlDate(license_obj.end_time),
-            license_key: license_data
-          };
-
-          console.log(upsert);
-          var match = {
-            app_id: license_obj.application_id,
-            cust_id: license_obj.customer_id
-          };
-
-          helpers.Upsert(upsert, match).then(function (status) {
-            if (status) {
-              response.message = "License Applied Successfully";
-              response.status = true;
-              response.decrypt = license_obj;
-              res.end(JSON.stringify(response));
+        if (check_array_equals) {
+          var app_exists = await helpers.getAppByAppId(license_obj.application_id).then(async (application) => {
+            if (application) {
+              return await helpers.getCustomerByCustId(license_obj.customer_id).then(customer_id => {
+                if (customer_id) {
+                  return true;
+                } else return false;
+              });
             } else {
-              response.message = "Application is not created in the database";
-              res.end(JSON.stringify(response));
+              return false;
             }
           });
+
+          if (app_exists) {
+            var upsert = {
+              app_id: license_obj.application_id,
+              cust_id: license_obj.customer_id,
+              no_of_users: license_obj.no_of_users,
+              grace_period: license_obj.grace_period,
+              license_start: helpers.formatMysqlDate(license_obj.start_time),
+              license_end: helpers.formatMysqlDate(license_obj.end_time),
+              license_key: license_data
+            };
+
+            console.log(upsert);
+            var match = {
+              app_id: license_obj.application_id,
+              cust_id: license_obj.customer_id
+            };
+
+            helpers.Upsert(upsert, match).then(function (status) {
+              if (status) {
+                response.message = "License Applied Successfully";
+                response.status = true;
+                response.decrypt = license_obj;
+                res.end(JSON.stringify(response));
+              } else {
+                response.message = "Application is not created in the database";
+                res.end(JSON.stringify(response));
+              }
+            });
+          } else {
+            response.message = "Application or Customer details doesn't exists";
+            res.end(JSON.stringify(response));
+          }
         } else {
-          response.message = "Application or Customer details doesn't exists";
+          response.message = "License file is corrupted";
           res.end(JSON.stringify(response));
         }
       } else {
