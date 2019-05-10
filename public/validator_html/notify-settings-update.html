@@ -118,47 +118,46 @@
                                             class="fas fa-angle-double-left"></i> Back to List</a>
                                 </div>
                                 <div class="panel-body m_top_20">
-									<form id="add_notification" method="POST" action="#">
-										<div class="col-md-6 col-xs-12">
-											<div class="md-input">
-												<input id="app_name" type="text" name='application_name'
-													class="md-form-control" />
-												<span class="highlight"></span>
-												<span class="bar"></span>
-												<label>Application Name</label>
-											</div>
-										</div>
-										<div class="col-md-6 col-xs-12">
-											<div class="md-input">
-												<input id="email" type="email" name='email' class="md-form-control"
-												 />
-												<span class="highlight"></span>
-												<span class="bar"></span>
-												<label>Email</label>
-											</div>
-										</div>
-										<div class="col-md-6 col-xs-12">
-											<div class="md-input">
-												<input id="exp_period" type="number" name='exp_notice_period'
-													class="md-form-control" />
-												<span class="highlight"></span>
-												<span class="bar"></span>
-												<label>Expiration Notice Period (in days)</label>
-											</div>
-										</div>
-										<div class="col-md-6 col-xs-12">
-											<div class="md-input">
-												<input id="grace_period" type="number" name='grace_period'
-													class="md-form-control" />
-												<span class="highlight"></span>
-												<span class="bar"></span>
-												<label>Grace Period (in days)</label>
-											</div>
-										</div>
-										<div class="col-md-6 col-xs-12">
+                                    <form id="add_notification" method="POST" action="#">
+                                        <div class="col-md-6 col-xs-12">
+                                            <div class="md-input">
+                                                <input id="app_name" type="text" name='application_name'
+                                                    class="md-form-control" />
+                                                <input id="noti_id" type="hidden" name='id' />
+                                                <span class="highlight"></span>
+                                                <span class="bar"></span>
+                                                <label class="active">Application Name</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-xs-12">
+                                            <div class="md-input">
+                                                <input id="email" type="text" name='email' class="md-form-control" />
+                                                <span class="highlight"></span>
+                                                <span class="bar"></span>
+                                                <label class="active">Email</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-xs-12">
+                                            <div class="md-input">
+                                                <input id="exp_period" type="number" name='exp_notice_period'
+                                                    class="md-form-control" />
+                                                <span class="highlight"></span>
+                                                <span class="bar"></span>
+                                                <label class="active">Expiration Notice Period (in days)</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-xs-12">
+                                            <div class="md-input">
+                                                <input id="grace_period" type="number" name='grace_period'
+                                                    class="md-form-control" />
+                                                <span class="highlight"></span>
+                                                <span class="bar"></span>
+                                                <label class="active">Grace Period (in days)</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-xs-12">
                                             <input class="btn btn-success" type="submit" value="Update">
                                         </div>
-									</div>
                                 </div>
                             </div>
                         </div>
@@ -166,6 +165,7 @@
                 </div>
             </div>
         </div>
+    </div>
     </div>
     <div id="footer" class="hccbpl">
         <img src="assets/img/sch_logo.png" class="img-responsive">
@@ -185,6 +185,7 @@
                 var str = "";
                 data = JSON.parse(data);
                 if (data) {
+                    $('#noti_id').val(data.id);
                     $('#app_name').val(data.application_name);
                     $('#email').val(data.email);
                     $('#exp_period').val(data.exp_period);
@@ -214,6 +215,37 @@
             }
             return query_string;
         }
+
+        $("#add_notification").submit(function (event) {
+            event.preventDefault();
+            console.log($('#app_name').val());
+            $.post("/license_validator/api/add_notification", {
+                    id: $('#noti_id').val(),
+                    application_name: $('#app_name').val(),
+                    email: $('#email').val(),
+                    exp_period: $('#exp_period').val(),
+                    grace_period: $('#grace_period').val()
+                },
+                function (data, status) {
+                    data = JSON.parse(data);
+                    if (data.status) {
+                        swal({
+                            title: "Success",
+                            text: data.message,
+                            icon: "success",
+                        });
+                        // $('#app_name').val("");
+                        // $('#email').val("");
+                        // $('#exp_period').val("");
+                    } else {
+                        swal({
+                            title: "Failed",
+                            text: data.message,
+                            icon: "error",
+                        });
+                    }
+                });
+        });
     </script>
 </body>
 

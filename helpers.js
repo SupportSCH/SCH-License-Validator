@@ -148,7 +148,9 @@ function InsertApplicationData(values, condition) {
         })
         .then(function (obj) {
             if (obj) { // update
-                return false;
+                return AppModel.update(values, {
+                    where: condition
+                });
             } else { // insert
                 return AppModel.create(values);
             }
@@ -165,7 +167,9 @@ function InsertCustomerData(values, condition) {
         })
         .then(function (obj) {
             if (obj) { // update
-                return false;
+                return CustomerModel.update(values, {
+                    where: condition
+                });;
             } else { // insert
                 return CustomerModel.create(values);
             }
@@ -321,7 +325,9 @@ function InsertDataSource(values, condition) {
         })
         .then(function (obj) {
             if (obj) { // update
-                return false;
+                return DataSourcesModel.update(values, {
+                    where: condition
+                });
             } else { // insert
                 return DataSourcesModel.create(values);
             }
@@ -338,7 +344,9 @@ function InsertNotification(values, condition) {
         })
         .then(function (obj) {
             if (obj) { // update
-                return false;
+                return NotiModel.update(values, {
+                    where: condition
+                });
             } else { // insert
                 return NotiModel.create(values);
             }
@@ -385,7 +393,7 @@ async function ProcessLicenseEmailJobs(res) {
                 var stat = {
                     status: true
                 };
-                
+
                 console.log("License expiration difference equals : " + between(noti.exp_period, diff_days, noti.exp_period));
 
                 if (between(noti.exp_period, diff_days, noti.exp_period)) {

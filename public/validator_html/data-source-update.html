@@ -118,64 +118,77 @@
                                             class="fas fa-angle-double-left"></i> Back to List</a>
                                 </div>
                                 <div class="panel-body m_top_20">
-									<form id="datasource_create" action="#" method="POST">
-										<div class="col-md-6 col-xs-12">
-											<div class="md-input">
-												<input id="app_name" type="text" name='application_name'
-													class="md-form-control" />
-												<span class="highlight"></span>
-												<span class="bar"></span>
-												<label>Application Name</label>
-											</div>
-										</div>
-										<!-- <div class="col-md-6 col-xs-12">
-											<div class="md-input">
-												<input id="trans_type" type="text" name='type' class="md-form-control"
-													readonly />
-												<span class="highlight"></span>
-												<span class="bar"></span>
-												<label class="readonly">Type</label>
-											</div>
-										</div> -->
-										<div class="col-md-6 col-xs-12">
-											<div class="md-input">
-												<input id="db_name" type="text" name='database_name' class="md-form-control"
-												 />
-												<span class="highlight"></span>
-												<span class="bar"></span>
-												<label>Database Name</label>
-											</div>
-										</div>
-										<div class="col-md-6 col-xs-12">
-											<div class="md-input">
-												<input id="tbl_name" type="text" name='table_name' class="md-form-control"
-												 />
-												<span class="highlight"></span>
-												<span class="bar"></span>
-												<label>Table Name</label>
-											</div>
-										</div>
-										<div class="col-md-6 col-xs-12">
-											<div class="md-input">
-												<input id="user_name" type="text" name='username' class="md-form-control"
-												 />
-												<span class="highlight"></span>
-												<span class="bar"></span>
-												<label>Username</label>
-											</div>
-										</div>
-										<div class="col-md-6 col-xs-12">
-											<div class="md-input">
-												<input id="password" type="password" name='password' class="md-form-control" />
-												<span class="highlight"></span>
-												<span class="bar"></span>
-												<label>Password</label>
-											</div>
-										</div>
-										<div class="col-md-6 col-xs-12">
+                                    <form id="datasource_create" action="#" method="POST">
+                                        <div class="col-md-6 col-xs-12">
+                                            <div class="md-input">
+                                                <input id="app_name" type="text" name='application_name'
+                                                    class="md-form-control" />
+                                                <input type="hidden" id="app_id" />
+                                                <span class="highlight"></span>
+                                                <span class="bar"></span>
+                                                <label class="active">Application Name</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-xs-12">
+                                            <div class="md-input">
+                                                <input id="ds_name" type="text" name='type' class="md-form-control"
+                                                    readonly />
+                                                <span class="highlight"></span>
+                                                <span class="bar"></span>
+                                                <label class="readonly">DATA SOURCE NAME</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6 col-xs-12">
+                                            <div class="md-input">
+                                                <input id="host" type="text" name='type' class="md-form-control"
+                                                    readonly />
+                                                <span class="highlight"></span>
+                                                <span class="bar"></span>
+                                                <label class="readonly">HOSTNAME</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6 col-xs-12">
+                                            <div class="md-input">
+                                                <input id="db_name" type="text" name='database_name'
+                                                    class="md-form-control" />
+                                                <span class="highlight"></span>
+                                                <span class="bar"></span>
+                                                <label class="active">Database Name</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-xs-12">
+                                            <div class="md-input">
+                                                <input id="tbl_name" type="text" name='table_name'
+                                                    class="md-form-control" />
+                                                <span class="highlight"></span>
+                                                <span class="bar"></span>
+                                                <label class="active">Table Name</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-xs-12">
+                                            <div class="md-input">
+                                                <input id="user_name" type="text" name='username'
+                                                    class="md-form-control" />
+                                                <span class="highlight"></span>
+                                                <span class="bar"></span>
+                                                <label class="active">Username</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-xs-12">
+                                            <div class="md-input">
+                                                <input id="password" type="password" name='password'
+                                                    class="md-form-control" />
+                                                <span class="highlight"></span>
+                                                <span class="bar"></span>
+                                                <label class="active">Password</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-xs-12">
                                             <input class="btn btn-success" type="submit" value="Update">
                                         </div>
-									</form>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -202,8 +215,10 @@
                 var str = "";
                 data = JSON.parse(data);
                 if (data) {
+                    $('#app_id').val(data.app_id);
                     $('#app_name').val(data.application_name);
-                    //$('#trans_type').val(data.trans_source.trans_name);
+                    $('#host').val(data.host);
+                    $('#ds_name').val(data.ds_name);
                     $('#db_name').val(data.db_name);
                     $('#tbl_name').val(data.tbl_name);
                     $('#user_name').val(data.user_name);
@@ -234,6 +249,114 @@
             }
             return query_string;
         }
+
+        $("#datasource_create").submit(function (event) {
+            console.log("fdsfsdsdf");
+            event.preventDefault();
+
+            if ($('#app_name').val() == "0") {
+                swal({
+                    title: "Info",
+                    text: "Please select app",
+                    icon: "error",
+                });
+
+                return;
+            }
+
+            if ($('#ds_name').val().length === 0) {
+                swal({
+                    title: "Info",
+                    text: "Please enter data source name",
+                    icon: "error",
+                });
+
+                return;
+            }
+
+            if ($('#host').val().length === 0) {
+                swal({
+                    title: "Info",
+                    text: "Please enter host name",
+                    icon: "error",
+                });
+
+                return;
+            }
+
+            if ($('#db_name').val().length === 0) {
+                swal({
+                    title: "Info",
+                    text: "Please database name",
+                    icon: "error",
+                });
+
+                return;
+            }
+
+            if ($('#tbl_name').val().length === 0) {
+                swal({
+                    title: "Info",
+                    text: "Please table or view name",
+                    icon: "error",
+                });
+
+                return;
+            }
+
+            if ($('#user_name').val().length === 0) {
+                swal({
+                    title: "Info",
+                    text: "Please user name",
+                    icon: "error",
+                });
+
+                return;
+            }
+
+            if ($('#password').val().length === 0) {
+                swal({
+                    title: "Info",
+                    text: "Please enter password",
+                    icon: "error",
+                });
+
+                return;
+            }
+
+            $.post("/license_validator/api/add_data_source", {
+                    application_name: $("#app_id").val(),
+                    app_id: $('#app_id').val(),
+                    ds_name: $('#ds_name').val(),
+                    trans_id: 1,
+                    host: $('#host').val(),
+                    db_name: $('#db_name').val(),
+                    tbl_name: $('#tbl_name').val(),
+                    user_name: $('#user_name').val(),
+                    password: $('#password').val(),
+                },
+                function (data, status) {
+                    data = JSON.parse(data);
+                    if (data.status) {
+                        swal({
+                            title: "Success",
+                            text: data.message,
+                            icon: "success",
+                        });
+                        // $('#app_name').val("");
+                        // $('#db_name').val("");
+                        // $('#tbl_name').val("");
+                        // $('#user_name').val("");
+                        // $('#password').val("");
+                    } else {
+                        swal({
+                            title: "Failed",
+                            text: data.message,
+                            icon: "error",
+                        });
+                    }
+                });
+        });
     </script>
 </body>
 

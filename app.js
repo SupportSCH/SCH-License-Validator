@@ -215,6 +215,26 @@ app.post('/create_license', async (req, res) => {
   }
 });
 
+app.get('/license_validator/api/getAppById/:id', async (req, res) => {
+  var app_exists = await helpers.getAppByAppId(req.params.id).then(async (application) => {
+    if (application) {
+      return res.end(JSON.stringify(application));
+    } else {
+      return res.end();
+    }
+  });
+});
+
+app.get('/license_validator/api/getCustomerById/:id', async (req, res) => {
+  var app_exists = await helpers.getCustomerByCustId(req.params.id).then(async (customer) => {
+    if (customer) {
+      return res.end(JSON.stringify(customer));
+    } else {
+      return res.end();
+    }
+  });
+});
+
 app.post('/license_validator/api/install_license', async (req, res) => {
   var response = {
     status: false,
@@ -605,14 +625,23 @@ app.post('/license_validator/api/add_notification', (req, res) => {
     message: "Unable to insert data source"
   };
   var request = req.body;
+  console.log(request);
   var upsert = {
-    ds_id: request.ds_id,
+    //ds_id: request.ds_id,
     application_name: request.application_name,
     email: request.email,
     exp_period: request.exp_period,
     grace_period: 10
   };
+
   var match = {};
+
+  if (request.hasOwnProperty("id")) {
+    upsert.id = request.id
+    match = {
+      id: request.id
+    }
+  }
 
   var insert = helpers.InsertNotification(upsert, match).then(function (status) {
     if (status) {

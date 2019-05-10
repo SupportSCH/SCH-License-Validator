@@ -202,7 +202,7 @@
                             "<td>" + data[i].tbl_name + "</td>" + "<td>" +
                             '<a href="data-source-details.html?&id=' + data[i].id + '"' +
                             'class="btn btn-info btn-xs" title="Data Source Details"><i class="fas fa-eye"></i></a> &nbsp;' +
-                            '<a href="data-source-update.html" class="btn btn-success btn-xs" title="Update Data Source"><i class="fas fa-pencil-alt"></i></a> &nbsp;' +
+                            '<a href="data-source-update.html?&id=' + data[i].id + '"' + ' class="btn btn-success btn-xs" title="Update Data Source"><i class="fas fa-pencil-alt"></i></a> &nbsp;' +
                             '<button onclick="delete_source(' + data[i].id +
                             ');" class="btn btn-danger btn-xs" title="Delete Data Source"><i class="far fa-trash-alt"></i></button> ' +
                             "</td></tr>";
