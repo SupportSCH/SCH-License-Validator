@@ -4,12 +4,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="loader" id="loaderurl" content="assets/img/loader.gif">
-<link rel="icon" type="image/png" href="/static/img/favicon.png" />
+<link rel="icon" type="image/png" href="/assets/img/favicon.png" />
 <title>SCH License Manager</title>
-<link rel="stylesheet" href="/static/css/bootstrap.css">
-<link rel="stylesheet" href="/static/css/font-awesome-all.css">
-<link rel="stylesheet" href="/static/css/supplierhub.css?v=1.1">
-<link rel="stylesheet" href="/static/css/themes.css?v=1.2">
+<link rel="stylesheet" href="/assets/css/bootstrap.css">
+<link rel="stylesheet" href="/assets/css/font-awesome-all.css">
+<link rel="stylesheet" href="/assets/css/supplierhub.css?v=1.1">
+<link rel="stylesheet" href="/assets/css/themes.css?v=1.2">
 </head>
 
 <body id="theme_sch">
@@ -26,7 +26,7 @@
                         <span class="icon-bar"></span>
                     </button>
                     <a class="navbar-brand sch_logo" href="#">
-                        <img src="/static/img/sch-logo-top.png" class="img-responsive">
+                        <img src="/assets/img/sch-logo-top.png" class="img-responsive">
                     </a>
                     <a id="sidebarCollapse" class="navbar-brand btn-expanded" role="button" data-toggle="dropdown">
                         <span></span>
@@ -38,13 +38,13 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
                         <a class="navbar-brand dropdown">
-                            <img src="/static/img/default-profile.png" class="pull-left m_top_3">
+                            <img src="/assets/img/default-profile.png" class="pull-left m_top_3">
                             <ul class="pull-right topbar-logo">
                                 <li class="fontSize12">EIM Solutions</li>
                             </ul>
                         </a>
                         <a href="#" class="navbar-brand" role="button" data-toggle="dropdown" aria-expanded="false">
-                            <img src="/static/img/down-chevron.png" class="img-responsive m_top_4">
+                            <img src="/assets/img/down-chevron.png" class="img-responsive m_top_4">
                         </a>
                         <ul class="dropdown-menu" role="menu">
                             <li>
@@ -197,7 +197,7 @@
         </div>
     </div>
     <div id="footer" class="hccbpl">
-        <img src="/static/img/sch_logo.png" class="img-responsive">
+        <img src="/assets/img/sch_logo.png" class="img-responsive">
     </div>
     <!-- Scripts -->
     <script src="assets/js/jquery.min.js"></script>
@@ -207,6 +207,23 @@
     <script src="assets/js/supplierhub.js"></script>
 
     <script>
+        $(document).ready(function () {
+            var base_url = parse_query_string(window.location.href);
+            var form_url = "/license_validator/api/license_details/" + base_url.id;
+            $.get(form_url, function (data, status) {
+                var str = "";
+                data = JSON.parse(data);
+                if (data) {
+                    $('#app_name').val(data.app_master.app_id);
+                    $('#cust_name').val(data.customer_master.cust_name);
+                    $('#start_time').val(GetFormattedDate(data.license_start));
+                    $('#end_time').val(GetFormattedDate(data.license_end));
+                    $('#users').val(data.no_of_users);
+                    $('#lic_key').val(data.license_key);
+                }
+            });
+        });
+
         function GetFormattedDate(date) {
             var d = new Date(date);
             var final = d.getDate().toString() + '-' + (d.getMonth() + 1).toString() + '-' + d.getFullYear().toString();
@@ -218,15 +235,37 @@
             return formattedTime;
         }
 
-        var data = "<%= data %>";
-        var update_ui = JSON.parse(atob(data));
-        console.log(update_ui);
-        $('#app_name').val(update_ui.app_master.app_id);
-        $('#cust_name').val(update_ui.customer_master.cust_name);
-        $('#start_time').val(GetFormattedDate(update_ui.license_start));
-        $('#end_time').val(GetFormattedDate(update_ui.license_end));
-        $('#users').val(update_ui.no_of_users);
-        $('#lic_key').val(update_ui.license_key);
+        // var data = "<%= data %>";
+        // var update_ui = JSON.parse(atob(data));
+        // console.log(update_ui);
+        // $('#app_name').val(update_ui.app_master.app_id);
+        // $('#cust_name').val(update_ui.customer_master.cust_name);
+        // $('#start_time').val(GetFormattedDate(update_ui.license_start));
+        // $('#end_time').val(GetFormattedDate(update_ui.license_end));
+        // $('#users').val(update_ui.no_of_users);
+        // $('#lic_key').val(update_ui.license_key);
+
+        function parse_query_string(query) {
+            var vars = query.split("&");
+            var query_string = {};
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split("=");
+                var key = decodeURIComponent(pair[0]);
+                var value = decodeURIComponent(pair[1]);
+                // If first entry with this name
+                if (typeof query_string[key] === "undefined") {
+                    query_string[key] = decodeURIComponent(value);
+                    // If second entry with this name
+                } else if (typeof query_string[key] === "string") {
+                    var arr = [query_string[key], decodeURIComponent(value)];
+                    query_string[key] = arr;
+                    // If third or later entry with this name
+                } else {
+                    query_string[key].push(decodeURIComponent(value));
+                }
+            }
+            return query_string;
+        }
     </script>
 </body>
 

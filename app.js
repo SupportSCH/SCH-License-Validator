@@ -309,8 +309,8 @@ app.post('/license_validator/api/validate_license', (req, res) => {
   var json = {
     status: true,
     reason: null,
-    license_start : 0,
-    license_end : 0
+    license_start: 0,
+    license_end: 0
   };
 
   validateBody(req.body, res, json);
@@ -347,12 +347,12 @@ function validateBody(body, res, json) {
   console.log("works");
   var data = helpers.getLicenseByAppId(body.application_id).then(application => {
     if (application) {
-		var json = {
-    status: true,
-    reason: null,
-    license_start : 0,
-    license_end : 0
-  };
+      var json = {
+        status: true,
+        reason: null,
+        license_start: 0,
+        license_end: 0
+      };
       if (body.application_id != application.app_id) {
         result.push('Application ID doesnt match');
       }
@@ -360,13 +360,13 @@ function validateBody(body, res, json) {
       if (body.user_count > application.no_of_users) {
         result.push('User limit reached');
       }
-      
+
       console.log(application);
 
       var cur_time = new Date().getTime() / 1000;
       var license_start = new Date(application.license_start).getTime() / 1000;
       var license_end = new Date(application.license_end).getTime() / 1000;
-      
+
       console.log(json);
       json.license_start = license_start;
       json.license_end = license_end;
@@ -506,11 +506,19 @@ app.get('/license_validator/api/get_licenses', (req, res) => {
 
 
 app.get('/license_validator/api/license_details/:id', (req, res) => {
+  // helpers.getLicenseDataById(req.params.id).then(licenses => {
+  //   //res.end(JSON.stringify(licenses));
+  //   res.render(__dirname + "/public/license-details.html", {
+  //     data: Buffer.from(JSON.stringify(licenses)).toString('base64')
+  //   });
+  // });
+
   helpers.getLicenseDataById(req.params.id).then(licenses => {
-    //res.end(JSON.stringify(licenses));
-    res.render(__dirname + "/public/license-details.html", {
-      data: Buffer.from(JSON.stringify(licenses)).toString('base64')
-    });
+    if (licenses) {
+      res.end(JSON.stringify(licenses));
+    } else {
+      res.end(null);
+    }
   });
 });
 
