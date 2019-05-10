@@ -88,8 +88,11 @@ const getLicenseByAppId = (application_id) => {
             app_id: application_id
         }
     }).then(response => {
+        if (response) {
+            return response.dataValues;
+        } else return false;
         //console.log(response.dataValues); //the object with the data I need
-        return response;
+        //return response;
     });
 }
 
@@ -382,6 +385,8 @@ async function ProcessLicenseEmailJobs(res) {
                 var stat = {
                     status: true
                 };
+                
+                console.log("License expiration difference equals : " + between(noti.exp_period, diff_days, noti.exp_period));
 
                 if (between(noti.exp_period, diff_days, noti.exp_period)) {
                     noti.data_source.user_name = cipher.decrypt(noti.data_source.user_name);
