@@ -327,7 +327,7 @@ app.post('/license_validator/api/install_license', async (req, res) => {
 
 app.post('/license_validator/api/validate_license', (req, res) => {
   var json = {
-    status: true,
+    status: false,
     reason: null,
     license_start: 0,
     license_end: 0
@@ -338,21 +338,11 @@ app.post('/license_validator/api/validate_license', (req, res) => {
 
 function validateBody(body, res, json) {
   var result = [];
-  // fs.readFile('public/eim_issued.lic', 'utf8', function (err, data) {
-
-  // });
-
   var check_required = [];
-  console.log("dsfsdfdsfdsfdsdsfdsfsdfsdfdsfdsfsdfdsfsdfsd");
-  console.log(json);
-
+  
   if (!body.hasOwnProperty('application_id')) {
     check_required.push('Application ID is empty in the request');
   }
-
-  // if (!body.hasOwnProperty('customer_id')) {
-  //   check_required.push('Customer ID is empty in the request ');
-  // }
 
   if (!body.hasOwnProperty('user_count')) {
     check_required.push('No of User count is empty in the request');
@@ -364,7 +354,6 @@ function validateBody(body, res, json) {
     res.end(JSON.stringify(json));
   }
 
-  console.log("works");
   var data = helpers.getLicenseByAppId(body.application_id).then(application => {
     if (application) {
       var json = {
@@ -415,6 +404,7 @@ function validateBody(body, res, json) {
       json.reason = JSON.stringify(['License is valid']);
       res.end(JSON.stringify(json));
     } else {
+      console.log("Application id not exists");
       var json = {
 
       };
