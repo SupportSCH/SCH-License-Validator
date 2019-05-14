@@ -157,6 +157,7 @@
     <script src="assets/js/sweetalert.min.js"></script>
     <script src="assets/js/bootstrap.js"></script>
     <script src="assets/js/supplierhub.js"></script>
+    <script src="assets/js/commons.js"></script>
     <script>
         $(document).ready(function () {
             load_ui();
@@ -169,10 +170,10 @@
                 if (data.length > 0) {
                     for (var i = 0; i < data.length; i++) {
                         str += "<tr><td>" + data[i].app_id + "</td>" + "<td>" + data[i].app_name +
-                            "</td>" + "<td><button onclick='delete_app(" + '"' + data[i].app_id + '"' +
+                            "</td>" + "<td><button onclick='delete_app(" + '"' + btoa(data[i].app_id) + '"' +
                             ")'" + "class='btn btn-danger btn-xs' title='Delete'>" +
                             "<i class='fas fa-trash'></i></button>" +
-							" &nbsp; <a href='application-update.html?&id=" + data[i].app_id +"' class='btn btn-info btn-xs' title='Update Application'><i class='fas fa-pencil-alt'></i></a></td></tr>";
+							" &nbsp; <a href='application-update.html?&id=" + btoa(data[i].app_id) +"' class='btn btn-info btn-xs' title='Update Application'><i class='fas fa-pencil-alt'></i></a></td></tr>";
                     }
                 }
                 $('#application_list').html(str);
@@ -199,18 +200,18 @@
             });
         }
 
-        $(".datePicker").datepicker({
-            format: 'dd-M-yyyy',
-            todayHighlight: true,
-            autoclose: true,
-        });
-        //datePicker lavel top
-        $(".md-form-control.datePicker").click(function () {
-            var $this = $(this);
-            if ($(this).val() == "") {
-                $this.siblings('label').addClass('active');
-            }
-        });
+        // $(".datePicker").datepicker({
+        //     format: 'dd-M-yyyy',
+        //     todayHighlight: true,
+        //     autoclose: true,
+        // });
+        // //datePicker lavel top
+        // $(".md-form-control.datePicker").click(function () {
+        //     var $this = $(this);
+        //     if ($(this).val() == "") {
+        //         $this.siblings('label').addClass('active');
+        //     }
+        // });
     </script>
 </body>
 

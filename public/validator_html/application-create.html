@@ -149,6 +149,7 @@
     <script src="assets/js/sweetalert.min.js"></script>
     <script src="assets/js/bootstrap.js"></script>
     <script src="assets/js/supplierhub.js"></script>
+    <script src="assets/js/commons.js"></script>
     <script>
         $("#application_creation").submit(function (event) {
             event.preventDefault();
@@ -197,18 +198,18 @@
             
         });
 
-        $(".datePicker").datepicker({
-            format: 'dd-M-yyyy',
-            todayHighlight: true,
-            autoclose: true,
-        });
-        //datePicker lavel top
-        $(".md-form-control.datePicker").click(function () {
-            var $this = $(this);
-            if ($(this).val() == "") {
-                $this.siblings('label').addClass('active');
-            }
-        });
+        // $(".datePicker").datepicker({
+        //     format: 'dd-M-yyyy',
+        //     todayHighlight: true,
+        //     autoclose: true,
+        // });
+        // //datePicker lavel top
+        // $(".md-form-control.datePicker").click(function () {
+        //     var $this = $(this);
+        //     if ($(this).val() == "") {
+        //         $this.siblings('label').addClass('active');
+        //     }
+        // });
     </script>
 </body>
 

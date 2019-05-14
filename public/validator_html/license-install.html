@@ -210,8 +210,11 @@
     <script src="assets/js/sweetalert.min.js"></script>
     <script src="assets/js/bootstrap.js"></script>
     <script src="assets/js/supplierhub.js"></script>
+    <script src="assets/js/commons.js"></script>
+
     <script>
         $("#install_lic").submit(function (event) {
+            event.preventDefault();
             $.post("/license_validator/api/install_license", {
                     license: $('#license_data').val()
                 },
@@ -240,20 +243,18 @@
                     }
                 });
             $('#license_data').val("");
-
-            event.preventDefault();
         });
 
-        function GetFormattedDate(date) {
-            var d = new Date(date);
-            var final = d.getDate().toString() + '-' + d.getMonth().toString() + '-' + d.getFullYear().toString();
-            return final;
-        }
+        // function GetFormattedDate(date) {
+        //     var d = new Date(date);
+        //     var final = d.getDate().toString() + '-' + d.getMonth().toString() + '-' + d.getFullYear().toString();
+        //     return final;
+        // }
 
-        function formatMysqlDate(unix_timestamp) {
-            var formattedTime = new Date(unix_timestamp * 1000).toJSON().slice(0, 19).replace('T', ' ').split(' ');
-            return formattedTime[0];
-        }
+        // function formatMysqlDate(unix_timestamp) {
+        //     var formattedTime = new Date(unix_timestamp * 1000).toJSON().slice(0, 19).replace('T', ' ').split(' ');
+        //     return formattedTime[0];
+        // }
     </script>
 </body>
 

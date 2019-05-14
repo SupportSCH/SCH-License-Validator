@@ -216,7 +216,7 @@ app.post('/create_license', async (req, res) => {
 });
 
 app.get('/license_validator/api/getAppById/:id', async (req, res) => {
-  var app_exists = await helpers.getAppByAppId(req.params.id).then(async (application) => {
+  var app_exists = await helpers.getAppByAppId(Buffer.from(req.params.id, 'base64').toString()).then(async (application) => {
     if (application) {
       return res.end(JSON.stringify(application));
     } else {
@@ -226,7 +226,7 @@ app.get('/license_validator/api/getAppById/:id', async (req, res) => {
 });
 
 app.get('/license_validator/api/getCustomerById/:id', async (req, res) => {
-  var app_exists = await helpers.getCustomerByCustId(req.params.id).then(async (customer) => {
+  var app_exists = await helpers.getCustomerByCustId(Buffer.from(req.params.id, 'base64').toString()).then(async (customer) => {
     if (customer) {
       return res.end(JSON.stringify(customer));
     } else {
@@ -533,7 +533,7 @@ app.get('/license_validator/api/license_details/:id', (req, res) => {
   //   });
   // });
 
-  helpers.getLicenseDataById(req.params.id).then(licenses => {
+  helpers.getLicenseDataById(Buffer.from(req.params.id, 'base64').toString()).then(licenses => {
     if (licenses) {
       res.end(JSON.stringify(licenses));
     } else {
@@ -737,8 +737,10 @@ app.post('/license_validator/api/license_test_api', (req, res) => {
   });
 });
 
+//convert from base64 Buffer.from(b64Encoded, 'base64').toString()
+
 app.get('/license_validator/api/delete_app/:id', (req, res) => {
-  helpers.deleteApplicationById(req.params.id).then(app_source => {
+  helpers.deleteApplicationById(Buffer.from(req.params.id, 'base64').toString()).then(app_source => {
     var response = {
       status: false,
       message: ""
@@ -756,7 +758,7 @@ app.get('/license_validator/api/delete_app/:id', (req, res) => {
 
 
 app.get('/license_validator/api/delete_customer/:id', (req, res) => {
-  helpers.deleteCustomerById(req.params.id).then(cus_source => {
+  helpers.deleteCustomerById(Buffer.from(req.params.id, 'base64').toString()).then(cus_source => {
     var response = {
       status: false,
       message: ""

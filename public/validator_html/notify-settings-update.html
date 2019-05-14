@@ -122,7 +122,7 @@
                                         <div class="col-md-6 col-xs-12">
                                             <div class="md-input">
                                                 <input id="app_name" type="text" name='application_name'
-                                                    class="md-form-control" />
+                                                    class="md-form-control" readonly/>
                                                 <input id="noti_id" type="hidden" name='id' />
                                                 <span class="highlight"></span>
                                                 <span class="bar"></span>
@@ -176,6 +176,7 @@
     <script src="assets/js/sweetalert.min.js"></script>
     <script src="assets/js/bootstrap.js"></script>
     <script src="assets/js/supplierhub.js"></script>
+    <script src="assets/js/commons.js"></script>
 
     <script>
         $(document).ready(function () {
@@ -184,9 +185,10 @@
             $.get(api_uri, function (data, status) {
                 var str = "";
                 data = JSON.parse(data);
+                console.log(data);
                 if (data) {
                     $('#noti_id').val(data.id);
-                    $('#app_name').val(data.application_name);
+                    $('#app_name').val(data.data_source.app_master.app_name);
                     $('#email').val(data.email);
                     $('#exp_period').val(data.exp_period);
                     $('#grace_period').val(data.grace_period);
@@ -194,31 +196,9 @@
             });
         });
 
-        function parse_query_string(query) {
-            var vars = query.split("&");
-            var query_string = {};
-            for (var i = 0; i < vars.length; i++) {
-                var pair = vars[i].split("=");
-                var key = decodeURIComponent(pair[0]);
-                var value = decodeURIComponent(pair[1]);
-                // If first entry with this name
-                if (typeof query_string[key] === "undefined") {
-                    query_string[key] = decodeURIComponent(value);
-                    // If second entry with this name
-                } else if (typeof query_string[key] === "string") {
-                    var arr = [query_string[key], decodeURIComponent(value)];
-                    query_string[key] = arr;
-                    // If third or later entry with this name
-                } else {
-                    query_string[key].push(decodeURIComponent(value));
-                }
-            }
-            return query_string;
-        }
-
         $("#add_notification").submit(function (event) {
             event.preventDefault();
-            console.log($('#app_name').val());
+            //console.log($('#app_name').val());
             $.post("/license_validator/api/add_notification", {
                     id: $('#noti_id').val(),
                     application_name: $('#app_name').val(),
@@ -234,9 +214,6 @@
                             text: data.message,
                             icon: "success",
                         });
-                        // $('#app_name').val("");
-                        // $('#email').val("");
-                        // $('#exp_period').val("");
                     } else {
                         swal({
                             title: "Failed",

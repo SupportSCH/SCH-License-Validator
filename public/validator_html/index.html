@@ -152,6 +152,7 @@
     <script src="assets/js/sweetalert.min.js"></script>
     <script src="assets/js/bootstrap.js"></script>
     <script src="assets/js/supplierhub.js"></script>
+    <script src="assets/js/commons.js"></script>
     <script>
         $(document).ready(function () {
             load_ui();
@@ -164,10 +165,10 @@
                 if (data.length > 0) {
                     for (var i = 0; i < data.length; i++) {
                         str += "<tr><td>" + data[i].cust_id + "</td>" + "<td>" + data[i].cust_name +
-                            "</td>" + "<td><button onclick='delete_customer(" + '"' + data[i].cust_id + '"' +
+                            "</td>" + "<td><button onclick='delete_customer(" + '"' + btoa(data[i].cust_id) + '"' +
                             ")'" + " class='btn btn-danger btn-xs' title='Delete'>" +
                             "<i class='fas fa-trash'></i></button>" + 
-							" &nbsp; <a href='customer-update.html?&id=" + data[i].cust_id + "' class='btn btn-info btn-xs' title='Update Customer'><i class='fas fa-pencil-alt'></i></a></td></tr>";
+							" &nbsp; <a href='customer-update.html?&id=" + btoa(data[i].cust_id) + "' class='btn btn-info btn-xs' title='Update Customer'><i class='fas fa-pencil-alt'></i></a></td></tr>";
                     }
                 }
                 $('#customer_list').html(str);

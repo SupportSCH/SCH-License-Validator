@@ -220,6 +220,8 @@ const getDataSourcesById = (source_id) => {
         },
         include: [{
             model: TransSourceModel
+        }, {
+            model: AppModel
         }]
     }).then(response => {
         //console.log(response); //the object with the data I need
@@ -233,7 +235,10 @@ const getNotificationById = (noti_id) => {
             id: noti_id
         },
         include: [{
-            model: DataSourcesModel
+            model: DataSourcesModel,
+            include: [
+                AppModel
+            ]
         }]
     }).then(response => {
         //console.log(response); //the object with the data I need
