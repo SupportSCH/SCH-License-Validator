@@ -409,12 +409,12 @@ function validateBody(body, res, json) {
 
       };
       json.status = false;
-      json.reason = ['License not exists'];
+      json.reason = JSON.stringify(['License not exists']);
       res.end(JSON.stringify(json));
     }
   }, (reason) => {
     json.status = false;
-    json.reason = reason;
+    json.reason = JSON.stringify(reason);
     res.end(JSON.stringify(json));
   });
 
@@ -423,7 +423,7 @@ function validateBody(body, res, json) {
 
     };
     json.status = false;
-    json.reason = reason;
+    json.reason = JSON.stringify(['Unknown License Applied']);
     res.end(JSON.stringify(json));
   }
 
