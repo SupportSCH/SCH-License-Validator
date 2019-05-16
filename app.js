@@ -39,6 +39,8 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
+app.use(bodyParser.json());
+
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 app.set('views', './public/validator_html');
