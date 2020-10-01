@@ -7,6 +7,7 @@ const LicenseModel = require('./models/license_manager');
 var TransSourceModel = require('./models/trans_source');
 var DataSourcesModel = require('./models/data_source');
 var ApiSourcesModel = require('./models/api_source');
+var UserLoginsModel = require('./models/user_logins');
 var NotiModel = require('./models/notifications');
 var emailer = require('./emailer');
 var external = require('./external_db');
@@ -64,11 +65,11 @@ const getLicenseDataById = (ids) => {
             id: ids
         },
         include: [{
-                model: AppModel
-            },
-            {
-                model: CustomerModel,
-            },
+            model: AppModel
+        },
+        {
+            model: CustomerModel,
+        },
         ]
     }).then(response => {
         //the object with the data I need
@@ -83,6 +84,7 @@ function formatMysqlDate(unix_timestamp) {
 }
 
 const getLicenseByAppId = (application_id) => {
+    console.log(application_id);
     return LicenseModel.findOne({
         where: {
             app_id: application_id
@@ -99,11 +101,11 @@ const getLicenseByAppId = (application_id) => {
 const getAllLicense = (application_id) => {
     return LicenseModel.findAll({
         include: [{
-                model: AppModel
-            },
-            {
-                model: CustomerModel,
-            },
+            model: AppModel
+        },
+        {
+            model: CustomerModel,
+        },
         ]
     }).then(response => {
         //console.log(response); //the object with the data I need
@@ -159,6 +161,33 @@ function InsertApplicationData(values, condition) {
         });
 }
 
+function InsertUserLogin(values, condition, totalUsers, licensedFor) {
+    return UserLoginsModel
+        .findOne({
+            where: condition
+        })
+        .then(function (obj) {
+            if (obj) { // update
+
+                return true;
+            } else { // insert
+
+                if (licensedFor > totalUsers) {
+                    let insert = UserLoginsModel.create(values);
+                    if (insert) {
+                        return true;
+                    } else return false;
+                } else return false;
+
+            }
+        }).catch(function (e) {
+            console.log(e);
+        });
+}
+
+async function getUserLoginsCount() {
+    return await UserLoginsModel.count();
+}
 
 function InsertCustomerData(values, condition) {
     return CustomerModel
@@ -467,6 +496,7 @@ module.exports = {
     deleteDataSourceById,
     InsertNotification,
     getAllNotifications,
+    getUserLoginsCount,
     getNotificationById,
     deleteNotificationById,
     parseDate,
@@ -476,5 +506,6 @@ module.exports = {
     GetFormattedDate,
     deleteApplicationById,
     deleteCustomerById,
+    InsertUserLogin,
     between
 };

@@ -10,6 +10,7 @@ var AppModel = require('./models/app_master');
 var CustomerModel = require('./models/customer_master');
 var LicenseModel = require('./models/license_manager');
 var DataSourcesModel = require('./models/data_source');
+var userLoginsModel = require('./models/user_logins');
 var NotiModel = require('./models/notifications');
 var external = require('./external_db');
 var helpers = require('./helpers');
@@ -338,10 +339,130 @@ app.post('/license_validator/api/validate_license', (req, res) => {
   validateBody(req.body, res, json);
 });
 
+app.post('/license_validator/api/validate_license_fs', async (req, res) => {
+  var json = {
+    status: false,
+    reason: null,
+    license_start: 0,
+    license_end: 0
+  };
+
+  await validateBodyFS(req.body, res, json);
+});
+
+async function validateBodyFS(body, res, json) {
+  var result = [];
+  var check_required = [];
+
+  if (!body.hasOwnProperty('application_id')) {
+    check_required.push('Application ID is empty in the request');
+  }
+
+  if (!body.hasOwnProperty('user_id')) {
+    check_required.push('User Id not present in the request');
+  }
+
+  if (check_required.length > 0) {
+    json.status = false;
+    json.reason = check_required;
+    res.json(json);
+  }
+
+  let totalUsersCount = await helpers.getUserLoginsCount();
+  console.log(totalUsersCount);
+
+  var data = helpers.getLicenseByAppId(body.application_id).then(application => {
+    if (application) {
+      var json = {
+        status: true,
+        reason: null,
+        license_start: 0,
+        license_end: 0
+      };
+      if (body.application_id != application.app_id) {
+        result.push('Application ID doesnt match');
+      }
+
+      var userValues = {
+        userId: body["user_id"]
+      };
+
+      helpers.InsertUserLogin(userValues, userValues, totalUsersCount, application.no_of_users).then(async (status) => {
+        var cur_time = new Date().getTime() / 1000;
+        var license_start = new Date(application.license_start).getTime() / 1000;
+        var license_end = new Date(application.license_end).getTime() / 1000;
+        if (status) {
+          console.log(json);
+          json.license_start = license_start;
+          json.license_end = license_end;
+          console.log("======= Current time =========");
+          console.log(cur_time);
+          console.log("======= Start time =========");
+          console.log(license_start);
+          console.log("======= End time =========");
+          console.log(license_end);
+
+          if (license_start > cur_time) {
+            result.push('License start time has not reached');
+          }
+
+          if (cur_time > license_end) {
+            result.push('License is expired');
+          }
+
+          if (result.length > 0) {
+            json.status = false;
+            json.reason = result;
+
+            res.json(json);
+          }
+
+          json.reason = ['License is valid'];
+          res.json(json);
+        } else {
+          if (totalUsersCount >= application.no_of_users) {
+            result.push('User limit reached');
+          }
+
+          json.license_start = license_start;
+          json.license_end = license_end;
+          json.status = false;
+          json.reason = result;
+          res.json(json);
+        }
+      });
+      console.log(application);
+    } else {
+      console.log("Application id not exists");
+      var json = {
+
+      };
+      json.status = false;
+      json.reason = ['License not exists'];
+      res.json(json);
+    }
+  }, (reason) => {
+    // json.status = false;
+    // json.reason = reason;
+    // res.json(json);
+  });
+
+  // if (data === false) {
+  //   var json = {
+
+  //   };
+  //   json.status = false;
+  //   json.reason = ['Unknown License Applied'];
+  //   res.json(json);
+  // }
+
+  return result;
+}
+
 function validateBody(body, res, json) {
   var result = [];
   var check_required = [];
-  
+
   if (!body.hasOwnProperty('application_id')) {
     check_required.push('Application ID is empty in the request');
   }
@@ -353,7 +474,7 @@ function validateBody(body, res, json) {
   if (check_required.length > 0) {
     json.status = false;
     json.reason = check_required;
-    res.end(JSON.stringify(json));
+    res.json(json);
   }
 
   var data = helpers.getLicenseByAppId(body.application_id).then(application => {
@@ -398,36 +519,36 @@ function validateBody(body, res, json) {
 
       if (result.length > 0) {
         json.status = false;
-        json.reason = JSON.stringify(result);
+        json.reason = result;
 
-        res.end(JSON.stringify(json));
+        res.json(json);
       }
 
-      json.reason = JSON.stringify(['License is valid']);
-      res.end(JSON.stringify(json));
+      json.reason = ['License is valid'];
+      res.json(json);
     } else {
       console.log("Application id not exists");
       var json = {
 
       };
       json.status = false;
-      json.reason = JSON.stringify(['License not exists']);
-      res.end(JSON.stringify(json));
+      json.reason = ['License not exists'];
+      res.json(json);
     }
   }, (reason) => {
-    json.status = false;
-    json.reason = JSON.stringify(reason);
-    res.end(JSON.stringify(json));
+    // json.status = false;
+    // json.reason = reason;
+    // res.json(json);
   });
 
-  if (data === false) {
-    var json = {
+  // if (data === false) {
+  //   var json = {
 
-    };
-    json.status = false;
-    json.reason = JSON.stringify(['Unknown License Applied']);
-    res.end(JSON.stringify(json));
-  }
+  //   };
+  //   json.status = false;
+  //   json.reason = JSON.stringify(['Unknown License Applied']);
+  //   res.end(JSON.stringify(json));
+  // }
 
   return result;
 }
@@ -788,6 +909,7 @@ app.use(function (req, res, next) {
 
 
 // start the express server
-app.listen(app.get('port'), () => console.log(`App started on port ${app.get('port')}`));
+console.log("Listening on Port : ", app.get('port'));
+app.listen(9091, () => console.log(`App started on port ${app.get('port')}`));
 
 module.exports = app;
