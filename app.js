@@ -255,7 +255,8 @@ app.post('/license_validator/api/install_license', async (req, res) => {
         //console.log(request_array);
         var required_array = ['application_id', 'application_name', 'customer_id', 'customer_name', 'no_of_users', 'grace_period', 'start_time', 'end_time'];
         var check_array_equals = helpers.arraysEqual(request_array, required_array);
-
+        console.log("val is :");
+        console.log(check_array_equals);
         if (check_array_equals) {
           var app_exists = await helpers.getAppByAppId(license_obj.application_id).then(async (application) => {
             if (application) {
@@ -276,9 +277,15 @@ app.post('/license_validator/api/install_license', async (req, res) => {
               no_of_users: license_obj.no_of_users,
               grace_period: license_obj.grace_period,
               license_start: helpers.formatMysqlDate(license_obj.start_time),
-              license_end: helpers.formatMysqlDate(license_obj.end_time),
+              //license_end: helpers.formatMysqlDate(license_obj.end_time),
               license_key: license_data
             };
+
+            if(license_obj.end_time) {
+              upsert["license_end"] = helpers.formatMysqlDate(license_obj.end_time);
+            } else {
+	      upsert["license_end"] = null;
+            }
 
             console.log(upsert);
             var match = {
@@ -390,7 +397,11 @@ async function validateBodyFS(body, res, json) {
       helpers.InsertUserLogin(userValues, userValues, totalUsersCount, application.no_of_users).then(async (status) => {
         var cur_time = new Date().getTime() / 1000;
         var license_start = new Date(application.license_start).getTime() / 1000;
-        var license_end = new Date(application.license_end).getTime() / 1000;
+        var license_end = null;
+        if(application.license_end) {
+          license_end = new Date(application.license_end).getTime() / 1000;
+        }
+        
         if (status) {
           console.log(json);
           json.license_start = license_start;
@@ -406,7 +417,7 @@ async function validateBodyFS(body, res, json) {
             result.push('License start time has not reached');
           }
 
-          if (cur_time > license_end) {
+          if (license_end !== null && cur_time > license_end) {
             result.push('License is expired');
           }
 

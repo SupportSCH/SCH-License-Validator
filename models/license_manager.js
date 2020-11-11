@@ -46,9 +46,8 @@ var LicenseModel = sequelize.define('license_masters', {
         allowNull: false
     },
     license_end: {
-        type: 'TIMESTAMP',
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-        allowNull: false
+        type: 'DATE',
+        allowNull: true
     },
     license_key: {
         type: Sequelize.STRING(10000),
